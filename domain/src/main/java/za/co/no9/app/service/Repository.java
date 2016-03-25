@@ -1,4 +1,4 @@
-package za.co.no9.app.util;
+package za.co.no9.app.service;
 
 import za.co.no9.app.domain.User;
 import za.co.no9.app.domain.UserName;

@@ -2,7 +2,6 @@ package za.co.no9.app.service;
 
 import za.co.no9.app.domain.User;
 import za.co.no9.app.domain.UserName;
-import za.co.no9.app.util.Repository;
 
 import java.util.HashSet;
 import java.util.Optional;
