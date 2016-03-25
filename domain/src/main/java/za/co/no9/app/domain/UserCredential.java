@@ -4,14 +4,14 @@ import static za.co.no9.app.util.Validation.validate;
 
 public class UserCredential {
     private final UserName username;
-    private final String password;
+    private final UserPassword password;
 
-    private UserCredential(UserName username, String password) {
+    private UserCredential(UserName username, UserPassword password) {
         this.username = validate(username).notNull().get();
-        this.password = validate(password, "password").minimumLength(5).get();
+        this.password = validate(password).notNull().get();
     }
 
-    public static UserCredential from(UserName username, String password) {
+    public static UserCredential from(UserName username, UserPassword password) {
         return new UserCredential(username, password);
     }
 
@@ -23,7 +23,7 @@ public class UserCredential {
         return username.equals(credential.username) && acceptPassword(credential.password);
     }
 
-    private boolean acceptPassword(String password) {
+    private boolean acceptPassword(UserPassword password) {
         return this.password.equals(password);
     }
 }

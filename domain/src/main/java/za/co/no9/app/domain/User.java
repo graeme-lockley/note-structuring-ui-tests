@@ -1,24 +1,27 @@
 package za.co.no9.app.domain;
 
+import za.co.no9.app.service.CredentialStore;
+import za.co.no9.app.util.DI;
+
 import static za.co.no9.app.util.Validation.validate;
 
 public class User {
-    private final UserCredential credential;
+    private final UserName name;
 
-    private User(UserCredential credential) {
-        this.credential = validate(credential).notNull().get();
+    private User(UserName name) {
+        this.name = validate(name).notNull().get();
     }
 
-    public static User from(UserCredential credential) {
-        return new User(credential);
+    public static User from(UserName name) {
+        return new User(name);
     }
 
-    public UserName username() {
-        return credential.username();
+    public UserName name() {
+        return name;
     }
 
     public boolean acceptCredential(UserCredential credential) {
-        return this.credential.acceptCredential(credential);
+        return DI.get(CredentialStore.class).accept(credential);
     }
 
     @Override
@@ -28,12 +31,12 @@ public class User {
 
         User user = (User) o;
 
-        return credential.equals(user.credential);
+        return name.equals(user.name);
 
     }
 
     @Override
     public int hashCode() {
-        return credential.hashCode();
+        return name.hashCode();
     }
 }

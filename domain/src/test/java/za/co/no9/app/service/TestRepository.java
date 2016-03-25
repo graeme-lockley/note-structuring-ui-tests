@@ -20,7 +20,7 @@ public class TestRepository implements Repository {
 
     @Override
     public Optional<User> findUser(UserName username) {
-        return users.stream().filter(u -> u.username().equals(username)).findFirst();
+        return users.stream().filter(u -> u.name().equals(username)).findFirst();
     }
 
     public static class TestRepositoryBuilder {

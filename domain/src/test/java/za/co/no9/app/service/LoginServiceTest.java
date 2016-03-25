@@ -5,6 +5,7 @@ import org.junit.Test;
 import za.co.no9.app.domain.User;
 import za.co.no9.app.domain.UserCredential;
 import za.co.no9.app.domain.UserName;
+import za.co.no9.app.domain.UserPassword;
 import za.co.no9.app.util.DI;
 import za.co.no9.app.util.Either;
 
@@ -12,14 +13,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class LoginServiceTest {
-    private static final UserCredential UNKNOWN_USER_CREDENTIAL = UserCredential.from(UserName.from("jimmy"), "bob's your uncle");
-    private static final UserCredential VALID_USER_CREDENTIAL = UserCredential.from(UserName.from("graeme"), "password");
-    private static final UserCredential INVALID_USER_CREDENTIAL = UserCredential.from(UserName.from("graeme"), "wrong-password");
+    private static final UserCredential UNKNOWN_USER_CREDENTIAL = UserCredential.from(UserName.from("jimmy"), UserPassword.from("bob's your uncle"));
+    private static final UserCredential VALID_USER_CREDENTIAL = UserCredential.from(UserName.from("graeme"), UserPassword.from("password"));
+    private static final UserCredential INVALID_USER_CREDENTIAL = UserCredential.from(UserName.from("graeme"), UserPassword.from("wrong-password"));
 
     @Before
     public void before() {
         DI.reset();
-        DI.register(TestRepository.builder().addUser(User.from(VALID_USER_CREDENTIAL)).build());
+        DI.register(TestRepository.builder().addUser(User.from(UserName.from("graeme"))).build());
+        DI.register(TestCredentialStore.builder().addCredential(UserCredential.from(UserName.from("graeme"), UserPassword.from("password"))).build());
         DI.register(new LoginService());
     }
 
