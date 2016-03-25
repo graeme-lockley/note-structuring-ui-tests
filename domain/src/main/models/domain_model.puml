@@ -1,0 +1,37 @@
+@startuml
+
+class User {
+	UserRef userID
+	UserCredentials credential
+}
+
+class Account {
+	AccountRef reference
+	Money balance
+	AccountName name
+}
+
+class Transaction {
+	Date when
+	TransactionRef reference
+	TransactionDescription description
+	Money amount
+}
+
+class AuditItem {
+	Date when
+	TransactionRef reference
+	TransactionDescription description
+	Money amount
+	AccountRef source
+	AccountRef target
+}
+
+User --* Account : "accounts"
+Account --* Transaction : "transactions"
+Transaction -- "1" Account : from
+Transaction -- "1" Account : to
+
+User --* AuditItem : "audit"
+
+@enduml

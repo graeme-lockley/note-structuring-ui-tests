@@ -1,0 +1,7 @@
+@startuml
+User --> (Login)
+User --> (View Accounts)
+User --> (Account Detail)
+User --> (Make Payment)
+User --> (Audit Trail)
+@enduml
