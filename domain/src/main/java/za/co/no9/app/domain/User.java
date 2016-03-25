@@ -1,7 +1,10 @@
 package za.co.no9.app.domain;
 
 import za.co.no9.app.service.CredentialStore;
+import za.co.no9.app.service.Repository;
 import za.co.no9.app.util.DI;
+
+import java.util.stream.Stream;
 
 import static za.co.no9.app.util.Validation.validate;
 
@@ -22,6 +25,10 @@ public class User {
 
     public boolean acceptCredential(UserCredential credential) {
         return DI.get(CredentialStore.class).accept(credential);
+    }
+
+    public Stream<Account> accounts() {
+        return DI.get(Repository.class).accounts(name);
     }
 
     @Override
