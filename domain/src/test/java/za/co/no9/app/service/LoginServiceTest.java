@@ -13,15 +13,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class LoginServiceTest {
+    private static final UserPassword VALID_USER_CREDENTIAL_PASSWORD = UserPassword.from("password");
+    private static final UserPassword INVALID_USER_CREDENTIAL_PASSWORD = UserPassword.from("wrong-password");
+
     private static final UserCredential UNKNOWN_USER_CREDENTIAL = UserCredential.from(UserName.from("jimmy"), UserPassword.from("bob's your uncle"));
-    private static final UserCredential VALID_USER_CREDENTIAL = UserCredential.from(UserName.from("graeme"), UserPassword.from("password"));
-    private static final UserCredential INVALID_USER_CREDENTIAL = UserCredential.from(UserName.from("graeme"), UserPassword.from("wrong-password"));
+    private static final UserCredential VALID_USER_CREDENTIAL = UserCredential.from(UserName.from("graeme"), VALID_USER_CREDENTIAL_PASSWORD);
+    private static final UserCredential INVALID_USER_CREDENTIAL = UserCredential.from(UserName.from("graeme"), INVALID_USER_CREDENTIAL_PASSWORD);
 
     @Before
     public void before() {
         DI.reset();
-        DI.register(TestRepository.builder().addUser(User.from(UserName.from("graeme"))).build());
-        DI.register(TestCredentialStore.builder().addCredential(UserCredential.from(UserName.from("graeme"), UserPassword.from("password"))).build());
+        DI.register(TestRepository.builder()
+                .addUser(User.from(VALID_USER_CREDENTIAL.username()))
+                .build());
+        DI.register(TestCredentialStore.builder()
+                .addCredential(VALID_USER_CREDENTIAL)
+                .build());
         DI.register(new LoginService());
     }
 
