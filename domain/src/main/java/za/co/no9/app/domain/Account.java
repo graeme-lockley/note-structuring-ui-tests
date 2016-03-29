@@ -1,5 +1,10 @@
 package za.co.no9.app.domain;
 
+import za.co.no9.app.service.Repository;
+import za.co.no9.app.util.DI;
+
+import java.util.stream.Stream;
+
 import static za.co.no9.app.util.Validation.validate;
 
 public class Account {
@@ -15,5 +20,13 @@ public class Account {
 
     public static Account from(AccountRef reference, Money balance, AccountName name) {
         return new Account(reference, balance, name);
+    }
+
+    public Stream<Transaction> transactions() {
+        return DI.get(Repository.class).transactions(reference);
+    }
+
+    public AccountRef reference() {
+        return reference;
     }
 }
