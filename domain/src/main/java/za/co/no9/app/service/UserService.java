@@ -1,11 +1,14 @@
 package za.co.no9.app.service;
 
+import za.co.no9.app.domain.AuditItem;
 import za.co.no9.app.domain.User;
 import za.co.no9.app.domain.UserCredential;
+import za.co.no9.app.domain.UserName;
 import za.co.no9.app.util.DI;
 import za.co.no9.app.util.Either;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static za.co.no9.app.service.UserService.LoginReasonFailures.INVALID_CREDENTIAL;
 import static za.co.no9.app.service.UserService.LoginReasonFailures.UNKNOWN_USER;
@@ -25,6 +28,10 @@ public class UserService {
         } else {
             return Either.left(UNKNOWN_USER);
         }
+    }
+
+    public Either<LoginReasonFailures, Stream<AuditItem>> auditTrial(UserName userName) {
+        return Either.left(UNKNOWN_USER);
     }
 
     public enum LoginReasonFailures {
