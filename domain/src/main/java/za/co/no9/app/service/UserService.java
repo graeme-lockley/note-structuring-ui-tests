@@ -10,11 +10,11 @@ import za.co.no9.app.util.Either;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static za.co.no9.app.service.UserService.LoginReasonFailures.INVALID_CREDENTIAL;
-import static za.co.no9.app.service.UserService.LoginReasonFailures.UNKNOWN_USER;
+import static za.co.no9.app.service.UserService.UserServiceFailures.INVALID_CREDENTIAL;
+import static za.co.no9.app.service.UserService.UserServiceFailures.UNKNOWN_USER;
 
 public class UserService {
-    public Either<LoginReasonFailures, User> login(UserCredential credential) {
+    public Either<UserServiceFailures, User> login(UserCredential credential) {
         Repository repository = DI.get(Repository.class);
 
         final Optional<User> user = repository.findUser(credential.username());
@@ -30,11 +30,11 @@ public class UserService {
         }
     }
 
-    public Either<LoginReasonFailures, Stream<AuditItem>> auditTrial(UserName userName) {
+    public Either<UserServiceFailures, Stream<AuditItem>> auditTrial(UserName userName) {
         return Either.left(UNKNOWN_USER);
     }
 
-    public enum LoginReasonFailures {
+    public enum UserServiceFailures {
         INVALID_CREDENTIAL, UNKNOWN_USER
     }
 }

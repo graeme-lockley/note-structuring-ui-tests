@@ -34,7 +34,7 @@ public class UserServiceTest {
 
     @Test
     public void should_login_if_a_user_does_exists() throws Exception {
-        Either<UserService.LoginReasonFailures, User> loginResult = DI.get(UserService.class).login(VALID_USER_CREDENTIAL);
+        Either<UserService.UserServiceFailures, User> loginResult = DI.get(UserService.class).login(VALID_USER_CREDENTIAL);
 
         assertTrue(loginResult.isRight());
         assertTrue(loginResult.right().acceptCredential(VALID_USER_CREDENTIAL));
@@ -42,17 +42,17 @@ public class UserServiceTest {
 
     @Test
     public void should_not_login_if_a_user_does_not_exist() throws Exception {
-        Either<UserService.LoginReasonFailures, User> loginResult = DI.get(UserService.class).login(UNKNOWN_USER_CREDENTIAL);
+        Either<UserService.UserServiceFailures, User> loginResult = DI.get(UserService.class).login(UNKNOWN_USER_CREDENTIAL);
 
         assertTrue(loginResult.isLeft());
-        assertEquals(UserService.LoginReasonFailures.UNKNOWN_USER, loginResult.left());
+        assertEquals(UserService.UserServiceFailures.UNKNOWN_USER, loginResult.left());
     }
 
     @Test
     public void should_not_login_if_the_users_password_is_invalid() throws Exception {
-        Either<UserService.LoginReasonFailures, User> loginResult = DI.get(UserService.class).login(INVALID_USER_CREDENTIAL);
+        Either<UserService.UserServiceFailures, User> loginResult = DI.get(UserService.class).login(INVALID_USER_CREDENTIAL);
 
         assertTrue(loginResult.isLeft());
-        assertEquals(UserService.LoginReasonFailures.INVALID_CREDENTIAL, loginResult.left());
+        assertEquals(UserService.UserServiceFailures.INVALID_CREDENTIAL, loginResult.left());
     }
 }
