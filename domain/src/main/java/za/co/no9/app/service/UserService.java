@@ -7,10 +7,10 @@ import za.co.no9.app.util.Either;
 
 import java.util.Optional;
 
-import static za.co.no9.app.service.LoginService.LoginReasonFailures.INVALID_CREDENTIAL;
-import static za.co.no9.app.service.LoginService.LoginReasonFailures.UNKNOWN_USER;
+import static za.co.no9.app.service.UserService.LoginReasonFailures.INVALID_CREDENTIAL;
+import static za.co.no9.app.service.UserService.LoginReasonFailures.UNKNOWN_USER;
 
-public class LoginService {
+public class UserService {
     public Either<LoginReasonFailures, User> login(UserCredential credential) {
         Repository repository = DI.get(Repository.class);
 

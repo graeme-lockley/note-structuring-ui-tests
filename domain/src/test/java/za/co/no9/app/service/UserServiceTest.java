@@ -12,7 +12,7 @@ import za.co.no9.app.util.Either;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class LoginServiceTest {
+public class UserServiceTest {
     private static final UserPassword VALID_USER_CREDENTIAL_PASSWORD = UserPassword.from("password");
     private static final UserPassword INVALID_USER_CREDENTIAL_PASSWORD = UserPassword.from("wrong-password");
 
@@ -29,12 +29,12 @@ public class LoginServiceTest {
         DI.register(TestCredentialStore.builder()
                 .addCredential(VALID_USER_CREDENTIAL)
                 .build());
-        DI.register(new LoginService());
+        DI.register(new UserService());
     }
 
     @Test
     public void should_login_if_a_user_does_exists() throws Exception {
-        Either<LoginService.LoginReasonFailures, User> loginResult = DI.get(LoginService.class).login(VALID_USER_CREDENTIAL);
+        Either<UserService.LoginReasonFailures, User> loginResult = DI.get(UserService.class).login(VALID_USER_CREDENTIAL);
 
         assertTrue(loginResult.isRight());
         assertTrue(loginResult.right().acceptCredential(VALID_USER_CREDENTIAL));
@@ -42,17 +42,17 @@ public class LoginServiceTest {
 
     @Test
     public void should_not_login_if_a_user_does_not_exist() throws Exception {
-        Either<LoginService.LoginReasonFailures, User> loginResult = DI.get(LoginService.class).login(UNKNOWN_USER_CREDENTIAL);
+        Either<UserService.LoginReasonFailures, User> loginResult = DI.get(UserService.class).login(UNKNOWN_USER_CREDENTIAL);
 
         assertTrue(loginResult.isLeft());
-        assertEquals(LoginService.LoginReasonFailures.UNKNOWN_USER, loginResult.left());
+        assertEquals(UserService.LoginReasonFailures.UNKNOWN_USER, loginResult.left());
     }
 
     @Test
     public void should_not_login_if_the_users_password_is_invalid() throws Exception {
-        Either<LoginService.LoginReasonFailures, User> loginResult = DI.get(LoginService.class).login(INVALID_USER_CREDENTIAL);
+        Either<UserService.LoginReasonFailures, User> loginResult = DI.get(UserService.class).login(INVALID_USER_CREDENTIAL);
 
         assertTrue(loginResult.isLeft());
-        assertEquals(LoginService.LoginReasonFailures.INVALID_CREDENTIAL, loginResult.left());
+        assertEquals(UserService.LoginReasonFailures.INVALID_CREDENTIAL, loginResult.left());
     }
 }
