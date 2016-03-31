@@ -9,11 +9,13 @@ public class TestRepository implements Repository {
     private final Set<User> users;
     private final Map<UserName, Set<Account>> accounts;
     private final Map<AccountRef, Transaction[]> accountTransactions;
+    private final Map<UserName, AuditItem[]> auditItems;
 
-    private TestRepository(Set<User> users, Map<UserName, Set<Account>> accounts, Map<AccountRef, Transaction[]> accountTransactions) {
+    private TestRepository(Set<User> users, Map<UserName, Set<Account>> accounts, Map<AccountRef, Transaction[]> accountTransactions, Map<UserName, AuditItem[]> auditItems) {
         this.users = users;
         this.accounts = accounts;
         this.accountTransactions = accountTransactions;
+        this.auditItems = auditItems;
     }
 
     public static TestRepositoryBuilder builder() {
@@ -56,10 +58,20 @@ public class TestRepository implements Repository {
         return Optional.empty();
     }
 
+    @Override
+    public Stream<AuditItem> auditItems(UserName userName) {
+        if (auditItems.containsKey(userName)) {
+            return Stream.of(auditItems.get(userName));
+        } else {
+            return Collections.<AuditItem>emptyList().stream();
+        }
+    }
+
     public static class TestRepositoryBuilder {
         private final Set<User> users = new HashSet<>();
         private final Map<UserName, Set<Account>> userAccounts = new HashMap<>();
         private final Map<AccountRef, Transaction[]> accountTransactions = new HashMap<>();
+        private final Map<UserName, AuditItem[]> auditItems = new HashMap<>();
 
         public TestRepositoryBuilder addUser(User user) {
             users.add(user);
@@ -81,8 +93,13 @@ public class TestRepository implements Repository {
             return this;
         }
 
+        public TestRepositoryBuilder addAuditTrail(UserName userName, AuditItem... auditItems) {
+            this.auditItems.put(userName, auditItems);
+            return this;
+        }
+
         public Repository build() {
-            return new TestRepository(users, userAccounts, accountTransactions);
+            return new TestRepository(users, userAccounts, accountTransactions, auditItems);
         }
     }
 }

@@ -46,4 +46,8 @@ public class User {
     public int hashCode() {
         return name.hashCode();
     }
+
+    public Stream<AuditItem> auditTrail() {
+        return DI.get(Repository.class).auditItems(name);
+    }
 }

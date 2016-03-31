@@ -13,4 +13,6 @@ public interface Repository {
     Stream<Transaction> transactions(AccountRef accountRef);
 
     Optional<Account> findAccount(AccountRef accountRef);
+
+    Stream<AuditItem> auditItems(UserName userName);
 }

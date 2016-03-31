@@ -15,9 +15,7 @@ import static za.co.no9.app.service.UserService.UserServiceFailures.UNKNOWN_USER
 
 public class UserService {
     public Either<UserServiceFailures, User> login(UserCredential credential) {
-        Repository repository = DI.get(Repository.class);
-
-        final Optional<User> user = repository.findUser(credential.username());
+        final Optional<User> user = DI.get(Repository.class).findUser(credential.username());
 
         if (user.isPresent()) {
             if (user.get().acceptCredential(credential)) {
@@ -31,7 +29,13 @@ public class UserService {
     }
 
     public Either<UserServiceFailures, Stream<AuditItem>> auditTrial(UserName userName) {
-        return Either.left(UNKNOWN_USER);
+        final Optional<User> user = DI.get(Repository.class).findUser(userName);
+
+        if (user.isPresent()) {
+            return Either.right(user.get().auditTrail());
+        } else {
+            return Either.left(UNKNOWN_USER);
+        }
     }
 
     public enum UserServiceFailures {
