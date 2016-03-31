@@ -1,9 +1,6 @@
 package za.co.no9.app.service;
 
-import za.co.no9.app.domain.Account;
-import za.co.no9.app.domain.AccountRef;
-import za.co.no9.app.domain.User;
-import za.co.no9.app.domain.UserName;
+import za.co.no9.app.domain.*;
 import za.co.no9.app.util.DI;
 import za.co.no9.app.util.Either;
 
@@ -21,11 +18,11 @@ public class AccountsService {
         }
     }
 
-    public Either<AccountsServiceFailures, Account> find(AccountRef accountRef) {
+    public Either<AccountsServiceFailures, Stream<Transaction>> accountTransactions(AccountRef accountRef) {
         final Optional<Account> account = DI.get(Repository.class).findAccount(accountRef);
 
         if (account.isPresent()) {
-            return Either.right(account.get());
+            return Either.right(account.get().transactions());
         } else {
             return Either.left(AccountsServiceFailures.UNKNOWN_ACCOUNT);
         }
