@@ -39,7 +39,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void should_return_no_accounts_if_the_user_has_no_accounts() throws Exception {
+    public void given_a_user_with_no_accounts_should_return_no_accounts() throws Exception {
         final Either<AccountServiceFailures, Stream<Account>> view = DI.get(AccountService.class).view(USER_A);
 
         assertTrue(view.isRight());
@@ -47,7 +47,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void should_return_two_accounts_if_the_user_is_known() throws Exception {
+    public void given_a_known_user_should_return_two_accounts() throws Exception {
         final Either<AccountServiceFailures, Stream<Account>> view = DI.get(AccountService.class).view(USER_B);
 
         assertTrue(view.isRight());
@@ -55,7 +55,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void should_return_an_error_if_user_is_unknown() throws Exception {
+    public void given_an_unknown_user_should_return_an_error() throws Exception {
         final Either<AccountServiceFailures, Stream<Account>> view = DI.get(AccountService.class).view(UNKNOWN_USER);
 
         assertTrue(view.isLeft());
@@ -63,7 +63,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void should_return_an_error_for_UNKNOWN_ACCOUNT() throws Exception {
+    public void given_an_unknown_account_should_return_an_error() throws Exception {
         final Either<AccountServiceFailures, Stream<Transaction>> findResult = DI.get(AccountService.class).accountTransactions(UNKNOWN_ACCOUNT);
 
         assertTrue(findResult.isLeft());
@@ -71,7 +71,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void should_return_no_transactions_for_ACCOUNT_B_1() throws Exception {
+    public void given_an_account_with_no_transactions_should_return_no_transactions() throws Exception {
         final Either<AccountServiceFailures, Stream<Transaction>> findResult = DI.get(AccountService.class).accountTransactions(ACCOUNT_B_1);
 
         assertTrue(findResult.isRight());
@@ -79,7 +79,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void should_return_two_transactions_for_ACCOUNT_B_2() throws Exception {
+    public void given_an_account_with_trasctions_should_return_these_transactions() throws Exception {
         final Either<AccountServiceFailures, Stream<Transaction>> findResult = DI.get(AccountService.class).accountTransactions(ACCOUNT_B_2);
 
         assertTrue(findResult.isRight());

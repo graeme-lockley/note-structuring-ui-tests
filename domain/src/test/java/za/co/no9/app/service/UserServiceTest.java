@@ -38,7 +38,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void should_login_if_a_user_does_exists() throws Exception {
+    public void given_a_known_user_should_login() throws Exception {
         Either<UserServiceFailures, User> loginResult = DI.get(UserService.class).login(VALID_USER_CREDENTIAL);
 
         assertTrue(loginResult.isRight());
@@ -46,7 +46,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void should_not_login_if_a_user_does_not_exist() throws Exception {
+    public void given_an_invalid_user_should_not_login() throws Exception {
         Either<UserServiceFailures, User> loginResult = DI.get(UserService.class).login(UNKNOWN_USER_CREDENTIAL);
 
         assertTrue(loginResult.isLeft());
@@ -62,7 +62,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void should_return_error_if_unknown_user_is_passed_to_audit_trail() throws Exception {
+    public void given_an_unknown_user_when_requesting_users_audit_trail_should_return_error() throws Exception {
         final Either<UserServiceFailures, Stream<AuditItem>> auditTrial = DI.get(UserService.class).auditTrial(UNKNOWN_USER_CREDENTIAL.username());
 
         assertTrue(auditTrial.isLeft());
@@ -70,7 +70,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void should_return_audit_items_if_valid_user_is_passed() throws Exception {
+    public void given_a_valid_user_when_requesting_audit_trail_should_return_audit_items() throws Exception {
         final Either<UserServiceFailures, Stream<AuditItem>> auditTrial = DI.get(UserService.class).auditTrial(VALID_USER_CREDENTIAL.username());
 
         assertTrue(auditTrial.isRight());
