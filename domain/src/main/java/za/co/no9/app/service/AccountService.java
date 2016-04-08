@@ -1,6 +1,10 @@
 package za.co.no9.app.service;
 
-import za.co.no9.app.domain.*;
+import za.co.no9.app.aggregate.user.User;
+import za.co.no9.app.domain.Account;
+import za.co.no9.app.domain.AccountRef;
+import za.co.no9.app.domain.Transaction;
+import za.co.no9.app.domain.UserName;
 import za.co.no9.app.util.DI;
 import za.co.no9.app.util.Either;
 

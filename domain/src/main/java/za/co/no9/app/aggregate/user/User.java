@@ -1,5 +1,8 @@
-package za.co.no9.app.domain;
+package za.co.no9.app.aggregate.user;
 
+import za.co.no9.app.domain.Account;
+import za.co.no9.app.domain.UserCredential;
+import za.co.no9.app.domain.UserName;
 import za.co.no9.app.service.CredentialStore;
 import za.co.no9.app.service.Repository;
 import za.co.no9.app.util.DI;

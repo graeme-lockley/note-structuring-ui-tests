@@ -2,6 +2,7 @@ package za.co.no9.app.service;
 
 import org.junit.Before;
 import org.junit.Test;
+import za.co.no9.app.aggregate.user.User;
 import za.co.no9.app.domain.*;
 import za.co.no9.app.service.AccountService.AccountServiceFailures;
 import za.co.no9.app.util.DI;

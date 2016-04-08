@@ -12,4 +12,8 @@ public class Money {
     public static Money from(double value) {
         return new Money(BigDecimal.valueOf(value));
     }
+
+    public boolean greaterThan(Money balance) {
+        return value.compareTo(balance.value) > 0;
+    }
 }

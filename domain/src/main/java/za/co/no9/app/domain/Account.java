@@ -29,4 +29,8 @@ public class Account {
     public AccountRef reference() {
         return reference;
     }
+
+    public Money balance() {
+        return balance;
+    }
 }
