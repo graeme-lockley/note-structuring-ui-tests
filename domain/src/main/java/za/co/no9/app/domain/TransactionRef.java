@@ -1,15 +1,21 @@
 package za.co.no9.app.domain;
 
-import static za.co.no9.app.util.Validation.validate;
-
 public final class TransactionRef {
-    private final String value;
+    private final long value;
 
-    private TransactionRef(String value) {
-        this.value = validate(value, "value").minimumLength(1).get();
+    private TransactionRef(long value) {
+        this.value = value;
     }
-    
-    public static TransactionRef from(String value) {
+
+    public static TransactionRef from(long value) {
         return new TransactionRef(value);
+    }
+
+    public TransactionRef next() {
+        return from(value + 1);
+    }
+
+    public boolean isLessThan(TransactionRef transactionRef) {
+        return value < transactionRef.value;
     }
 }

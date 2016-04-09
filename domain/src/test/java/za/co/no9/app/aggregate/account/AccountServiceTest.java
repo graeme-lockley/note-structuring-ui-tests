@@ -5,11 +5,13 @@ import org.junit.Test;
 import za.co.no9.app.aggregate.account.AccountService.AccountServiceFailure;
 import za.co.no9.app.domain.*;
 import za.co.no9.app.event.AccountAdded;
+import za.co.no9.app.event.InterAccountTransferred;
 import za.co.no9.app.event.UserAdded;
 import za.co.no9.app.util.DI;
 import za.co.no9.app.util.Either;
 import za.co.no9.app.util.EventStore;
 
+import java.util.Date;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
@@ -26,7 +28,9 @@ public class AccountServiceTest {
     public static final AccountName ACCOUNT_B_1_NAME = AccountName.from("Account 12345");
     public static final AccountRef ACCOUNT_B_2 = AccountRef.from("12346");
     public static final AccountName ACCOUNT_B_2_NAME = AccountName.from("Account 12346");
-    public static final AccountRef UNKNOWN_ACCOUNT = AccountRef.from("12347");
+    public static final AccountRef ACCOUNT_B_3 = AccountRef.from("12347");
+    public static final AccountName ACCOUNT_B_3_NAME = AccountName.from("Account 12347");
+    public static final AccountRef UNKNOWN_ACCOUNT = AccountRef.from("12348");
 
     private AccountService accountService = new AccountService();
     private EventStore eventStore = new EventStore();
@@ -42,7 +46,11 @@ public class AccountServiceTest {
         eventStore.publishEvent(new UserAdded(USER_A, USER_A_PASSWORD));
         eventStore.publishEvent(new UserAdded(USER_B, USER_B_PASSWORD));
         eventStore.publishEvent(new AccountAdded(USER_B, ACCOUNT_B_1, Money.from(0.0), ACCOUNT_B_1_NAME));
-        eventStore.publishEvent(new AccountAdded(USER_B, ACCOUNT_B_2, Money.from(0.0), ACCOUNT_B_2_NAME));
+        eventStore.publishEvent(new AccountAdded(USER_B, ACCOUNT_B_2, Money.from(100.0), ACCOUNT_B_2_NAME));
+        eventStore.publishEvent(new AccountAdded(USER_B, ACCOUNT_B_3, Money.from(0.0), ACCOUNT_B_3_NAME));
+        eventStore.publishEvent(new InterAccountTransferred(USER_B, new Date(), ACCOUNT_B_2, ACCOUNT_B_3, Money.from(1.0), TransactionRef.from(1), TransactionDescription.from("Transaction 1")));
+        eventStore.publishEvent(new InterAccountTransferred(USER_B, new Date(), ACCOUNT_B_2, ACCOUNT_B_3, Money.from(2.0), TransactionRef.from(2), TransactionDescription.from("Transaction 2")));
+        eventStore.publishEvent(new InterAccountTransferred(USER_B, new Date(), ACCOUNT_B_2, ACCOUNT_B_3, Money.from(3.0), TransactionRef.from(3), TransactionDescription.from("Transaction 3")));
     }
 
     @Test
@@ -54,11 +62,11 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void given_a_known_user_should_return_two_accounts() throws Exception {
+    public void given_a_known_user_should_return_three_accounts() throws Exception {
         final Either<AccountService.AccountServiceFailure, Stream<Account>> view = accountService.accounts(USER_B);
 
         assertTrue(view.isRight());
-        assertEquals(2, view.right().count());
+        assertEquals(3, view.right().count());
     }
 
     @Test
@@ -83,5 +91,13 @@ public class AccountServiceTest {
 
         assertTrue(findResult.isRight());
         assertEquals(0, findResult.right().count());
+    }
+
+    @Test
+    public void given_an_account_with_multiple_transactions_should_return_these_transactions() throws Exception {
+        final Either<AccountService.AccountServiceFailure, Stream<Transaction>> findResult = accountService.accountTransactions(ACCOUNT_B_2);
+
+        assertTrue(findResult.isRight());
+        assertEquals(3, findResult.right().count());
     }
 }

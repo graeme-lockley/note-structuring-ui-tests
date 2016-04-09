@@ -4,6 +4,7 @@ import za.co.no9.app.domain.AccountRef;
 import za.co.no9.app.domain.Transaction;
 import za.co.no9.app.domain.UserName;
 import za.co.no9.app.event.AccountAdded;
+import za.co.no9.app.event.InterAccountTransferred;
 import za.co.no9.app.event.UserAdded;
 import za.co.no9.app.util.Either;
 
@@ -22,10 +23,15 @@ public class AccountService {
     }
 
     private void apply(AccountAdded event) {
-        final Account account = Account.from(event.reference, event.openingBalance, event.name);
+        final Account account = new Account();
 
         userAccounts.get(event.userName).add(account);
-        accounts.put(account.reference(), account);
+        accounts.put(event.reference, account);
+    }
+
+    private void apply(InterAccountTransferred event) {
+        accounts.get(event.source).addTransaction(Transaction.from(event.when, event.reference, event.description, event.amount, true));
+        accounts.get(event.destination).addTransaction(Transaction.from(event.when, event.reference, event.description, event.amount, false));
     }
 
     public Either<AccountServiceFailure, Stream<Account>> accounts(UserName user) {

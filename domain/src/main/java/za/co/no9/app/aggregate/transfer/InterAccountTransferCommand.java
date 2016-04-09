@@ -1,9 +1,9 @@
 package za.co.no9.app.aggregate.transfer;
 
-import za.co.no9.app.domain.AccountRef;
-import za.co.no9.app.domain.Money;
-import za.co.no9.app.domain.TransactionDescription;
-import za.co.no9.app.domain.UserName;
+import za.co.no9.app.domain.*;
+import za.co.no9.app.event.InterAccountTransferred;
+
+import java.util.Date;
 
 public class InterAccountTransferCommand {
     public final UserName user;
@@ -18,5 +18,9 @@ public class InterAccountTransferCommand {
         this.destination = destination;
         this.paymentAmount = paymentAmount;
         this.description = description;
+    }
+
+    public InterAccountTransferred makeEvent(Date when, TransactionRef reference) {
+        return new InterAccountTransferred(user, when, source, destination, paymentAmount, reference, description);
     }
 }

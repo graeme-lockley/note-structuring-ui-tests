@@ -11,8 +11,7 @@ import za.co.no9.app.util.EventStore;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TransferServiceTest {
     public static final UserName VALID_USER = UserName.from("mary-anne");
@@ -26,9 +25,9 @@ public class TransferServiceTest {
     public static final Money ACCOUNT_2_OPENING_BALANCE = Money.from(12345.67);
     public static final AccountName ACCOUNT_2_NAME = AccountName.from("Cheque Account");
     public static final AccountRef UNKNOWN_ACCOUNT = AccountRef.from("12347");
-    private static final Money PAYMENT_AMOUNT = Money.from(12.00);
-    private static final Money ILLEGAL_PAYMENT_AMOUNT = Money.from(12345.00);
-    private static final TransactionDescription PAYMENT_DESCRIPTION = TransactionDescription.from("Test Payment");
+    public static final Money PAYMENT_AMOUNT = Money.from(12.00);
+    public static final Money ILLEGAL_PAYMENT_AMOUNT = Money.from(12345.00);
+    public static final TransactionDescription PAYMENT_DESCRIPTION = TransactionDescription.from("Test Payment");
 
     private TransferService transferService = new TransferService();
     private EventStore eventStore = new EventStore();
@@ -82,10 +81,12 @@ public class TransferServiceTest {
         assertEquals(1, failures.get().size());
     }
 
-//    @Test
-//    public void given_a_valid_payment_should_update_accounts_transactions_audit_trail() throws Exception {
-//        final Either<Set<PaymentService.PaymentServiceFailures>, TransactionRef> failures = DI.get(PaymentService.class).payment(VALID_USER, ACCOUNT_1, ACCOUNT_2, PAYMENT_AMOUNT, PAYMENT_DESCRIPTION);
-//
-//        assertTrue(failures.isRight());
-//    }
+    @Test
+    public void given_a_valid_interaccount_transfer_the_account_balances_are_updated() throws Exception {
+        final Optional<Set<TransferService.PaymentServiceFailure>> failures = transferService.interAccountTransfer(new InterAccountTransferCommand(VALID_USER, ACCOUNT_1, ACCOUNT_2, PAYMENT_AMOUNT, PAYMENT_DESCRIPTION));
+
+        assertFalse(failures.isPresent());
+        assertEquals(ACCOUNT_1_OPENING_BALANCE.subtract(PAYMENT_AMOUNT), transferService.getUser(VALID_USER).findAccount(ACCOUNT_1).get().balance());
+        assertEquals(ACCOUNT_2_OPENING_BALANCE.add(PAYMENT_AMOUNT), transferService.getUser(VALID_USER).findAccount(ACCOUNT_2).get().balance());
+    }
 }
