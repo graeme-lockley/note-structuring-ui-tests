@@ -1,7 +1,6 @@
 package za.co.no9.app.aggregate.account;
 
 import za.co.no9.app.domain.AccountRef;
-import za.co.no9.app.domain.Transaction;
 import za.co.no9.app.domain.UserName;
 import za.co.no9.app.event.AccountAdded;
 import za.co.no9.app.event.InterAccountTransferred;

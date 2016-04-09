@@ -1,7 +1,5 @@
 package za.co.no9.app.aggregate.account;
 
-import za.co.no9.app.domain.Transaction;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
