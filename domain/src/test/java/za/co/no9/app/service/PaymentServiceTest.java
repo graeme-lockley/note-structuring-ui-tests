@@ -2,6 +2,7 @@ package za.co.no9.app.service;
 
 import org.junit.Before;
 import org.junit.Test;
+import za.co.no9.app.aggregate.account.Account;
 import za.co.no9.app.aggregate.user.AuditItem;
 import za.co.no9.app.aggregate.user.User;
 import za.co.no9.app.domain.*;
@@ -30,7 +31,7 @@ public class PaymentServiceTest {
     public void before() {
         DI.reset();
         DI.register(TestRepository.builder()
-                .addUser(User.from(VALID_USER))
+                .addUser(User.from(VALID_USER, UserPassword.from("123456")))
                 .addAccount(VALID_USER, Account.from(ACCOUNT_1, Money.from(123.45), AccountName.from("Credit Card")))
                 .addAccount(VALID_USER, Account.from(ACCOUNT_2, Money.from(543.21), AccountName.from("Card Finance")))
                 .addTransactions(ACCOUNT_2,

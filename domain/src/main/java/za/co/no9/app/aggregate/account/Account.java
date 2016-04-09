@@ -1,8 +1,12 @@
-package za.co.no9.app.domain;
+package za.co.no9.app.aggregate.account;
 
-import za.co.no9.app.service.Repository;
-import za.co.no9.app.util.DI;
+import za.co.no9.app.domain.AccountName;
+import za.co.no9.app.domain.AccountRef;
+import za.co.no9.app.domain.Money;
+import za.co.no9.app.domain.Transaction;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static za.co.no9.app.util.Validation.validate;
@@ -11,6 +15,7 @@ public class Account {
     private final AccountRef reference;
     private final Money balance;
     private final AccountName name;
+    private final List<Transaction> transactions = new ArrayList<>();
 
     private Account(AccountRef reference, Money balance, AccountName name) {
         this.reference = validate(reference).notNull().get();
@@ -23,7 +28,7 @@ public class Account {
     }
 
     public Stream<Transaction> transactions() {
-        return DI.get(Repository.class).transactions(reference);
+        return transactions.stream();
     }
 
     public AccountRef reference() {
@@ -32,5 +37,9 @@ public class Account {
 
     public Money balance() {
         return balance;
+    }
+
+    public boolean hasSufficientFundsToDebit(Money amount) {
+        return balance.greaterThan(amount);
     }
 }

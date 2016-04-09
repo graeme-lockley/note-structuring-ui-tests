@@ -1,5 +1,6 @@
 package za.co.no9.app.service;
 
+import za.co.no9.app.aggregate.account.Account;
 import za.co.no9.app.aggregate.user.User;
 import za.co.no9.app.domain.*;
 import za.co.no9.app.util.DI;

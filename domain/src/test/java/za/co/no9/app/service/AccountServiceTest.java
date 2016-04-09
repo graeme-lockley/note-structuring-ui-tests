@@ -2,6 +2,7 @@ package za.co.no9.app.service;
 
 import org.junit.Before;
 import org.junit.Test;
+import za.co.no9.app.aggregate.account.Account;
 import za.co.no9.app.aggregate.user.User;
 import za.co.no9.app.domain.*;
 import za.co.no9.app.service.AccountService.AccountServiceFailures;
@@ -28,8 +29,8 @@ public class AccountServiceTest {
     public void before() {
         DI.reset();
         DI.register(TestRepository.builder()
-                .addUser(User.from(USER_A))
-                .addUser(User.from(USER_B))
+                .addUser(User.from(USER_A, UserPassword.from("123456")))
+                .addUser(User.from(USER_B, UserPassword.from("123456")))
                 .addAccount(USER_B, Account.from(ACCOUNT_B_1, Money.from(123.45), AccountName.from("Credit Card")))
                 .addAccount(USER_B, Account.from(ACCOUNT_B_2, Money.from(543.21), AccountName.from("Card Finance")))
                 .addTransactions(ACCOUNT_B_2,
@@ -77,13 +78,5 @@ public class AccountServiceTest {
 
         assertTrue(findResult.isRight());
         assertEquals(0, findResult.right().count());
-    }
-
-    @Test
-    public void given_an_account_with_trasctions_should_return_these_transactions() throws Exception {
-        final Either<AccountServiceFailures, Stream<Transaction>> findResult = DI.get(AccountService.class).accountTransactions(ACCOUNT_B_2);
-
-        assertTrue(findResult.isRight());
-        assertEquals(2, findResult.right().count());
     }
 }

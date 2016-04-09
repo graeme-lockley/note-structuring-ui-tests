@@ -1,9 +1,9 @@
 package za.co.no9.app.aggregate.user;
 
-import za.co.no9.app.domain.Account;
+import za.co.no9.app.aggregate.account.Account;
 import za.co.no9.app.domain.UserCredential;
 import za.co.no9.app.domain.UserName;
-import za.co.no9.app.service.CredentialStore;
+import za.co.no9.app.domain.UserPassword;
 import za.co.no9.app.service.Repository;
 import za.co.no9.app.util.DI;
 
@@ -13,13 +13,15 @@ import static za.co.no9.app.util.Validation.validate;
 
 public class User {
     private final UserName name;
+    private final UserPassword password;
 
-    private User(UserName name) {
+    private User(UserName name, UserPassword password) {
         this.name = validate(name).notNull().get();
+        this.password = validate(password).notNull().get();
     }
 
-    public static User from(UserName name) {
-        return new User(name);
+    public static User from(UserName name, UserPassword password) {
+        return new User(name, password);
     }
 
     public UserName name() {
@@ -27,7 +29,7 @@ public class User {
     }
 
     public boolean acceptCredential(UserCredential credential) {
-        return DI.get(CredentialStore.class).accept(credential);
+        return credential.acceptCredential(name, password);
     }
 
     public Stream<Account> accounts() {
