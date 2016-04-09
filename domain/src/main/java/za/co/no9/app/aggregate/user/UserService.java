@@ -4,13 +4,11 @@ import za.co.no9.app.domain.UserCredential;
 import za.co.no9.app.domain.UserName;
 import za.co.no9.app.event.UserAdded;
 import za.co.no9.app.util.DI;
-import za.co.no9.app.util.Either;
 import za.co.no9.app.util.EventStore;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class UserService {
     private Map<UserName, User> users = new HashMap<>();
@@ -36,15 +34,6 @@ public class UserService {
             return Optional.empty();
         } else {
             return Optional.of(UserServiceFailure.INVALID_CREDENTIAL);
-        }
-    }
-
-    public Either<UserServiceFailure, Stream<AuditItem>> auditTrial(UserName name) {
-        final User user = users.get(name);
-        if (user == null) {
-            return Either.left(UserServiceFailure.UNKNOWN_USER);
-        } else {
-            return Either.right(user.auditTrail());
         }
     }
 

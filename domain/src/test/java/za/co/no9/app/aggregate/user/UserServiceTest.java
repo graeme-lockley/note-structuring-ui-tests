@@ -8,11 +8,9 @@ import za.co.no9.app.domain.UserName;
 import za.co.no9.app.domain.UserPassword;
 import za.co.no9.app.event.UserAdded;
 import za.co.no9.app.util.DI;
-import za.co.no9.app.util.Either;
 import za.co.no9.app.util.EventStore;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
@@ -66,13 +64,13 @@ public class UserServiceTest {
         assertEquals(UserServiceFailure.INVALID_CREDENTIAL, loginResult.get());
     }
 
-    @Test
-    public void given_an_unknown_user_when_requesting_users_audit_trail_should_return_error() throws Exception {
-        final Either<UserServiceFailure, Stream<AuditItem>> auditTrial = userService.auditTrial(UNKNOWN_USER_CREDENTIAL.username());
-
-        assertTrue(auditTrial.isLeft());
-        assertEquals(UserServiceFailure.UNKNOWN_USER, auditTrial.left());
-    }
+//    @Test
+//    public void given_an_unknown_user_when_requesting_users_audit_trail_should_return_error() throws Exception {
+//        final Either<UserServiceFailure, Stream<AuditItem>> auditTrial = userService.auditTrial(UNKNOWN_USER_CREDENTIAL.username());
+//
+//        assertTrue(auditTrial.isLeft());
+//        assertEquals(UserServiceFailure.UNKNOWN_USER, auditTrial.left());
+//    }
 
 //    @Test
 //    public void given_a_valid_user_when_requesting_audit_trail_should_return_audit_items() throws Exception {
