@@ -3,7 +3,6 @@ package za.co.no9.app.aggregate.user;
 import org.junit.Before;
 import org.junit.Test;
 import za.co.no9.app.aggregate.user.UserService.UserServiceFailure;
-import za.co.no9.app.domain.UserCredential;
 import za.co.no9.app.domain.UserName;
 import za.co.no9.app.domain.UserPassword;
 import za.co.no9.app.event.UserAdded;

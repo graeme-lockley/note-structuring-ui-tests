@@ -1,6 +1,5 @@
 package za.co.no9.app.aggregate.user;
 
-import za.co.no9.app.domain.UserCredential;
 import za.co.no9.app.domain.UserName;
 import za.co.no9.app.event.UserAdded;
 import za.co.no9.app.util.DI;

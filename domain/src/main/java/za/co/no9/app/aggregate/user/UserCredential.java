@@ -1,4 +1,7 @@
-package za.co.no9.app.domain;
+package za.co.no9.app.aggregate.user;
+
+import za.co.no9.app.domain.UserName;
+import za.co.no9.app.domain.UserPassword;
 
 import static za.co.no9.app.util.Validation.validate;
 
