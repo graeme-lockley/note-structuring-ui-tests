@@ -71,12 +71,7 @@ public class TransferService {
     }
 
     private Optional<User> findUser(UserName name) {
-        User user = users.get(name);
-        if (user == null) {
-            return Optional.empty();
-        } else {
-            return Optional.of(user);
-        }
+        return Optional.ofNullable(users.get(name));
     }
 
     enum PaymentServiceFailure {

@@ -13,18 +13,22 @@ public class EventStore {
     }
 
     public void publishEvent(Event event) {
+        for (Object handler : handlers) {
+            processEvent(handler, event);
+        }
+    }
+
+    public void processEvent(Object handler, Event event) {
         Class[] parameterType = new Class[1];
         parameterType[0] = event.getClass();
 
-        for (Object handler : handlers) {
-            try {
-                final Method apply = handler.getClass().getDeclaredMethod("apply", parameterType);
-                apply.setAccessible(true);
-                apply.invoke(handler, event);
-            } catch (NoSuchMethodException ignored) {
-            } catch (InvocationTargetException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
+        try {
+            final Method apply = handler.getClass().getDeclaredMethod("apply", parameterType);
+            apply.setAccessible(true);
+            apply.invoke(handler, event);
+        } catch (NoSuchMethodException ignored) {
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 }
