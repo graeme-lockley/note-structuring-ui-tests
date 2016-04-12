@@ -1,8 +1,8 @@
 @startuml
 
-class User {
-	UserID userID
-	UserCredentials credential
+class Client {
+	ClientID clientID
+	Credentials credential
 }
 
 class Account {
@@ -27,11 +27,11 @@ class AuditItem {
 	AccountRef target
 }
 
-User --* Account : "accounts"
+Client --* Account : "accounts"
 Account --* Transaction : "transactions"
 Transaction -- "1" Account : from
 Transaction -- "1" Account : to
 
-User --* AuditItem : "audit"
+Client --* AuditItem : "audit"
 
 @enduml

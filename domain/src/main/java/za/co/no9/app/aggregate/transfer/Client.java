@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public class User {
+public class Client {
     private Set<Account> accounts = new HashSet<>();
 
     public Account getAccount(AccountRef accountRef) {

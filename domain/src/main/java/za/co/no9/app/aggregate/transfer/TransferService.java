@@ -1,10 +1,10 @@
 package za.co.no9.app.aggregate.transfer;
 
+import za.co.no9.app.domain.ClientID;
 import za.co.no9.app.domain.TransactionRef;
-import za.co.no9.app.domain.UserID;
 import za.co.no9.app.event.AccountAdded;
+import za.co.no9.app.event.ClientAdded;
 import za.co.no9.app.event.InterAccountTransferred;
-import za.co.no9.app.event.UserAdded;
 import za.co.no9.app.util.DI;
 import za.co.no9.app.util.EventStore;
 
@@ -14,16 +14,16 @@ import java.util.Optional;
 import java.util.Set;
 
 public class TransferService {
-    private Users users = new Users();
+    private Clients clients = new Clients();
     private TransactionRef lastReference = TransactionRef.from(0);
 
     public Optional<Set<PaymentServiceFailure>> interAccountTransfer(InterAccountTransferCommand command) {
         final Set<PaymentServiceFailure> failures = new HashSet<>();
 
-        final Optional<User> user = users.find(command.userID);
-        if (user.isPresent()) {
-            final Optional<Account> sourceAccount = user.get().findAccount(command.source);
-            final Optional<Account> destinationAccount = user.get().findAccount(command.destination);
+        final Optional<Client> client = clients.find(command.clientID);
+        if (client.isPresent()) {
+            final Optional<Account> sourceAccount = client.get().findAccount(command.source);
+            final Optional<Account> destinationAccount = client.get().findAccount(command.destination);
 
             if (!sourceAccount.isPresent()) {
                 failures.add(PaymentServiceFailure.UNKNOWN_SOURCE_ACCOUNT);
@@ -34,7 +34,7 @@ public class TransferService {
                 failures.add(PaymentServiceFailure.UNKNOWN_DESTINATION_ACCOUNT);
             }
         } else {
-            failures.add(PaymentServiceFailure.UNKNOWN_USER);
+            failures.add(PaymentServiceFailure.UNKNOWN_CLIENT);
         }
 
         if (failures.isEmpty()) {
@@ -50,29 +50,29 @@ public class TransferService {
         return new Date();
     }
 
-    private void apply(UserAdded event) {
-        users.add(event.userID, new User());
+    private void apply(ClientAdded event) {
+        clients.add(event.clientID, new Client());
     }
 
     private void apply(AccountAdded event) {
-        users.get(event.userID).addAccount(Account.from(event.reference, event.openingBalance));
+        clients.get(event.clientID).addAccount(Account.from(event.reference, event.openingBalance));
     }
 
     private void apply(InterAccountTransferred event) {
-        final User user = users.get(event.userID);
-        user.getAccount(event.source).debit(event.amount);
-        user.getAccount(event.destination).credit(event.amount);
+        final Client client = clients.get(event.clientID);
+        client.getAccount(event.source).debit(event.amount);
+        client.getAccount(event.destination).credit(event.amount);
 
         if (lastReference.isLessThan(event.reference)) {
             lastReference = event.reference;
         }
     }
 
-    public User getUser(UserID userID) {
-        return users.get(userID);
+    public Client getClient(ClientID clientID) {
+        return clients.get(clientID);
     }
 
     enum PaymentServiceFailure {
-        UNKNOWN_USER, UNKNOWN_SOURCE_ACCOUNT, UNKNOWN_DESTINATION_ACCOUNT, INSUFFICIENT_FUNDS
+        UNKNOWN_CLIENT, UNKNOWN_SOURCE_ACCOUNT, UNKNOWN_DESTINATION_ACCOUNT, INSUFFICIENT_FUNDS
     }
 }

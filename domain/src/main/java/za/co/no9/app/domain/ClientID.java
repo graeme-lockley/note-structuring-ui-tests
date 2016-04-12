@@ -2,15 +2,15 @@ package za.co.no9.app.domain;
 
 import static za.co.no9.app.util.Validation.validate;
 
-public class UserID {
+public class ClientID {
     private final String value;
 
-    private UserID(String value) {
+    private ClientID(String value) {
         this.value = validate(value, "value").minimumLength(5).get();
     }
 
-    public static UserID from(String value) {
-        return new UserID(value);
+    public static ClientID from(String value) {
+        return new ClientID(value);
     }
 
     @Override
@@ -18,9 +18,9 @@ public class UserID {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserID userID = (UserID) o;
+        ClientID clientID = (ClientID) o;
 
-        return value.equals(userID.value);
+        return value.equals(clientID.value);
 
     }
 

@@ -2,15 +2,15 @@ package za.co.no9.app.domain;
 
 import static za.co.no9.app.util.Validation.validate;
 
-public class UserPassword {
+public class Password {
     private final String password;
 
-    private UserPassword(String password) {
+    private Password(String password) {
         this.password = validate(password, "password").minimumLength(5).get();
     }
 
-    public static UserPassword from(String password) {
-        return new UserPassword(password);
+    public static Password from(String password) {
+        return new Password(password);
     }
 
     @Override
@@ -18,7 +18,7 @@ public class UserPassword {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserPassword that = (UserPassword) o;
+        Password that = (Password) o;
 
         return password.equals(that.password);
 
