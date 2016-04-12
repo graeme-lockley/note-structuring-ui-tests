@@ -1,6 +1,6 @@
 package za.co.no9.app.aggregate.user;
 
-import za.co.no9.app.domain.UserName;
+import za.co.no9.app.domain.UserID;
 import za.co.no9.app.event.UserAdded;
 import za.co.no9.app.util.DI;
 import za.co.no9.app.util.EventStore;
@@ -10,10 +10,10 @@ import java.util.Map;
 import java.util.Optional;
 
 public class UserService {
-    private Map<UserName, User> users = new HashMap<>();
+    private Map<UserID, User> users = new HashMap<>();
 
     public Optional<UserServiceFailure> addUser(AddUserCommand command) {
-        if (users.containsKey(command.name)) {
+        if (users.containsKey(command.userID)) {
             return Optional.of(UserServiceFailure.DUPLICATE_USERNAME);
         }
         DI.get(EventStore.class).publishEvent(command.makeEvent());
@@ -22,7 +22,7 @@ public class UserService {
     }
 
     private void apply(UserAdded event) {
-        users.put(event.name, User.from(event.name, event.password));
+        users.put(event.userID, User.from(event.userID, event.password));
     }
 
     public Optional<UserServiceFailure> login(UserCredential credential) {
@@ -36,8 +36,8 @@ public class UserService {
         }
     }
 
-    public Optional<User> findUser(UserName name) {
-        return Optional.ofNullable(users.get(name));
+    public Optional<User> findUser(UserID userID) {
+        return Optional.ofNullable(users.get(userID));
     }
 
     public enum UserServiceFailure {

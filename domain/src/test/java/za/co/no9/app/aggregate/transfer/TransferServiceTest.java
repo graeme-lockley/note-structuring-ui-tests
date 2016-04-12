@@ -14,9 +14,9 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 public class TransferServiceTest {
-    public static final UserName VALID_USER = UserName.from("mary-anne");
+    public static final UserID VALID_USER = UserID.from("mary-anne");
     public static final UserPassword VALID_USER_PASSWORD = UserPassword.from("password");
-    public static final UserName UNKNOWN_USER = UserName.from("joe-joe");
+    public static final UserID UNKNOWN_USER = UserID.from("joe-joe");
 
     public static final AccountRef ACCOUNT_1 = AccountRef.from("12345");
     public static final Money ACCOUNT_1_OPENING_BALANCE = Money.from(123.45);

@@ -3,7 +3,7 @@ package za.co.no9.app.aggregate.user;
 import org.junit.Before;
 import org.junit.Test;
 import za.co.no9.app.aggregate.user.UserService.UserServiceFailure;
-import za.co.no9.app.domain.UserName;
+import za.co.no9.app.domain.UserID;
 import za.co.no9.app.domain.UserPassword;
 import za.co.no9.app.util.DI;
 import za.co.no9.app.util.EventStore;
@@ -13,13 +13,13 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 
 public class UserServiceTest {
-    private static final UserName VALID_USER_NAME = UserName.from("graeme");
+    private static final UserID VALID_USER_NAME = UserID.from("graeme");
     private static final UserPassword VALID_USER_PASSWORD = UserPassword.from("password");
     private static final UserPassword INVALID_USER_PASSWORD = UserPassword.from("wrong-password");
 
-    private static final UserCredential UNKNOWN_USER_CREDENTIAL = UserCredential.from(UserName.from("jimmy"), UserPassword.from("bob's your uncle"));
+    private static final UserCredential UNKNOWN_USER_CREDENTIAL = UserCredential.from(UserID.from("jimmy"), UserPassword.from("bob's your uncle"));
     private static final UserCredential VALID_USER_CREDENTIAL = UserCredential.from(VALID_USER_NAME, VALID_USER_PASSWORD);
-    private static final UserCredential INVALID_USER_CREDENTIAL = UserCredential.from(UserName.from("graeme"), INVALID_USER_PASSWORD);
+    private static final UserCredential INVALID_USER_CREDENTIAL = UserCredential.from(UserID.from("graeme"), INVALID_USER_PASSWORD);
 
     private UserService userService = new UserService();
     private EventStore eventStore = new EventStore();
