@@ -8,7 +8,6 @@ public class AddClientCommand {
     public final ClientID clientID;
     public final Password password;
 
-
     public AddClientCommand(ClientID clientID, Password password) {
         this.clientID = clientID;
         this.password = password;
