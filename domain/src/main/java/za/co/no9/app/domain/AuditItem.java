@@ -1,9 +1,4 @@
-package za.co.no9.app.aggregate.user;
-
-import za.co.no9.app.domain.AccountRef;
-import za.co.no9.app.domain.Money;
-import za.co.no9.app.domain.TransactionDescription;
-import za.co.no9.app.domain.TransactionRef;
+package za.co.no9.app.domain;
 
 import java.util.Date;
 

@@ -8,17 +8,19 @@ import za.co.no9.app.event.UserAdded;
 import za.co.no9.app.util.DI;
 import za.co.no9.app.util.EventStore;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 public class TransferService {
+    private Users users = new Users();
     private TransactionRef lastReference = TransactionRef.from(0);
-
-    private Map<UserName, User> users = new HashMap<>();
 
     public Optional<Set<PaymentServiceFailure>> interAccountTransfer(InterAccountTransferCommand command) {
         final Set<PaymentServiceFailure> failures = new HashSet<>();
 
-        final Optional<User> user = findUser(command.user);
+        final Optional<User> user = users.find(command.user);
         if (user.isPresent()) {
             final Optional<Account> sourceAccount = user.get().findAccount(command.source);
             final Optional<Account> destinationAccount = user.get().findAccount(command.destination);
@@ -49,7 +51,7 @@ public class TransferService {
     }
 
     private void apply(UserAdded event) {
-        users.put(event.name, new User());
+        users.add(event.name, new User());
     }
 
     private void apply(AccountAdded event) {
@@ -57,7 +59,7 @@ public class TransferService {
     }
 
     private void apply(InterAccountTransferred event) {
-        final User user = getUser(event.user);
+        final User user = users.get(event.user);
         user.getAccount(event.source).debit(event.amount);
         user.getAccount(event.destination).credit(event.amount);
 
@@ -66,12 +68,8 @@ public class TransferService {
         }
     }
 
-    public User getUser(UserName name) {
-        return findUser(name).get();
-    }
-
-    private Optional<User> findUser(UserName name) {
-        return Optional.ofNullable(users.get(name));
+    public User getUser(UserName user) {
+        return users.get(user);
     }
 
     enum PaymentServiceFailure {

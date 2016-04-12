@@ -3,13 +3,11 @@ package za.co.no9.app.aggregate.user;
 import org.junit.Before;
 import org.junit.Test;
 import za.co.no9.app.aggregate.user.UserService.UserServiceFailure;
-import za.co.no9.app.domain.*;
-import za.co.no9.app.event.InterAccountTransferred;
-import za.co.no9.app.event.UserAdded;
+import za.co.no9.app.domain.UserName;
+import za.co.no9.app.domain.UserPassword;
 import za.co.no9.app.util.DI;
 import za.co.no9.app.util.EventStore;
 
-import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -23,9 +21,6 @@ public class UserServiceTest {
     private static final UserCredential VALID_USER_CREDENTIAL = UserCredential.from(VALID_USER_NAME, VALID_USER_PASSWORD);
     private static final UserCredential INVALID_USER_CREDENTIAL = UserCredential.from(UserName.from("graeme"), INVALID_USER_PASSWORD);
 
-    private static final AccountRef ACCOUNT_1 = AccountRef.from("account1");
-    private static final AccountRef ACCOUNT_2 = AccountRef.from("account2");
-
     private UserService userService = new UserService();
     private EventStore eventStore = new EventStore();
 
@@ -37,7 +32,7 @@ public class UserServiceTest {
 
         eventStore.registerEventHandler(userService);
 
-        eventStore.publishEvent(new UserAdded(VALID_USER_CREDENTIAL.username(), VALID_USER_PASSWORD));
+        userService.addUser(new AddUserCommand(VALID_USER_CREDENTIAL.username(), VALID_USER_PASSWORD));
     }
 
     @Test
@@ -66,34 +61,5 @@ public class UserServiceTest {
 
         assertTrue(loginResult.isPresent());
         assertEquals(UserServiceFailure.INVALID_CREDENTIAL, loginResult.get());
-    }
-
-    @Test
-    public void given_an_unknown_user_when_requesting_users_audit_trail_should_return_error() throws Exception {
-        final Optional<User> user = userService.findUser(UNKNOWN_USER_CREDENTIAL.username());
-
-        assertFalse(user.isPresent());
-    }
-
-    @Test
-    public void given_a_valid_user_when_requesting_audit_trail_should_return_audit_items() throws Exception {
-        final Optional<User> user = userService.findUser(VALID_USER_CREDENTIAL.username());
-
-        assertTrue(user.isPresent());
-
-        assertEquals(0, user.get().auditItems().count());
-    }
-
-    @Test
-    public void given_a_valid_user_and_interaccount_transfers_when_requesting_audit_trail_should_return_audit_items() throws Exception {
-        eventStore.publishEvent(new InterAccountTransferred(VALID_USER_NAME, new Date(), ACCOUNT_1, ACCOUNT_2, Money.from(1.0), TransactionRef.from(1), TransactionDescription.from("Transaction 1")));
-        eventStore.publishEvent(new InterAccountTransferred(VALID_USER_NAME, new Date(), ACCOUNT_1, ACCOUNT_2, Money.from(2.0), TransactionRef.from(2), TransactionDescription.from("Transaction 2")));
-        eventStore.publishEvent(new InterAccountTransferred(VALID_USER_NAME, new Date(), ACCOUNT_1, ACCOUNT_2, Money.from(3.0), TransactionRef.from(3), TransactionDescription.from("Transaction 3")));
-
-        final Optional<User> user = userService.findUser(VALID_USER_CREDENTIAL.username());
-
-        assertTrue(user.isPresent());
-
-        assertEquals(3, user.get().auditItems().count());
     }
 }

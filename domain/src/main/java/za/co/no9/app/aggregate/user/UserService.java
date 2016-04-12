@@ -1,7 +1,6 @@
 package za.co.no9.app.aggregate.user;
 
 import za.co.no9.app.domain.UserName;
-import za.co.no9.app.event.InterAccountTransferred;
 import za.co.no9.app.event.UserAdded;
 import za.co.no9.app.util.DI;
 import za.co.no9.app.util.EventStore;
@@ -24,10 +23,6 @@ public class UserService {
 
     private void apply(UserAdded event) {
         users.put(event.name, User.from(event.name, event.password));
-    }
-
-    private void apply(InterAccountTransferred event) {
-        DI.get(EventStore.class).processEvent(findUser(event.user).get(), event);
     }
 
     public Optional<UserServiceFailure> login(UserCredential credential) {

@@ -22,14 +22,6 @@ public class UserCredential {
         return username;
     }
 
-    public boolean acceptCredential(UserCredential credential) {
-        return username.equals(credential.username) && acceptPassword(credential.password);
-    }
-
-    private boolean acceptPassword(UserPassword password) {
-        return this.password.equals(password);
-    }
-
     public boolean acceptCredential(UserName name, UserPassword password) {
         return username.equals(name) && this.password.equals(password);
     }
