@@ -18,8 +18,4 @@ public class Transaction {
         this.amount = validate(amount).notNull().get();
         this.isDebit = isDebit;
     }
-
-    public static Transaction from(Date when, TransactionRef reference, TransactionDescription description, Money amount, boolean isDebit) {
-        return new Transaction(when, reference, description, amount, isDebit);
-    }
 }

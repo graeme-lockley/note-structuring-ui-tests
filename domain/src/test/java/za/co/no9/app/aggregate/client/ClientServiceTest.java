@@ -13,13 +13,13 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 
 public class ClientServiceTest {
-    private static final ClientID VALID_CLIENT_NAME = ClientID.from("graeme");
-    private static final Password VALID_CLIENT_PASSWORD = Password.from("password");
-    private static final Password INVALID_CLIENT_PASSWORD = Password.from("wrong-password");
+    private static final ClientID VALID_CLIENT_NAME = new ClientID("graeme");
+    private static final Password VALID_CLIENT_PASSWORD = new Password("password");
+    private static final Password INVALID_CLIENT_PASSWORD = new Password("wrong-password");
 
-    private static final Credential UNKNOWN_CLIENT_CREDENTIAL = Credential.from(ClientID.from("jimmy"), Password.from("bob's your uncle"));
+    private static final Credential UNKNOWN_CLIENT_CREDENTIAL = Credential.from(new ClientID("jimmy"), new Password("bob's your uncle"));
     private static final Credential VALID_CLIENT_CREDENTIAL = Credential.from(VALID_CLIENT_NAME, VALID_CLIENT_PASSWORD);
-    private static final Credential INVALID_CLIENT_CREDENTIAL = Credential.from(ClientID.from("graeme"), INVALID_CLIENT_PASSWORD);
+    private static final Credential INVALID_CLIENT_CREDENTIAL = Credential.from(new ClientID("graeme"), INVALID_CLIENT_PASSWORD);
 
     private ClientService clientService = new ClientService();
     private EventStore eventStore = new EventStore();

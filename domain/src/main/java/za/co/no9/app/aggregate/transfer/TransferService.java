@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class TransferService {
     private Clients clients = new Clients();
-    private TransactionRef lastReference = TransactionRef.from(0);
+    private TransactionRef lastReference = new TransactionRef((long) 0);
 
     public Optional<Set<PaymentServiceFailure>> interAccountTransfer(InterAccountTransferCommand command) {
         final Set<PaymentServiceFailure> failures = new HashSet<>();

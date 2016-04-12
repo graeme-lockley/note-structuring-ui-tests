@@ -14,20 +14,20 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 public class TransferServiceTest {
-    public static final ClientID VALID_CLIENT = ClientID.from("mary-anne");
-    public static final Password VALID_CLIENT_PASSWORD = Password.from("password");
-    public static final ClientID UNKNOWN_CLIENT = ClientID.from("joe-joe");
+    public static final ClientID VALID_CLIENT = new ClientID("mary-anne");
+    public static final Password VALID_CLIENT_PASSWORD = new Password("password");
+    public static final ClientID UNKNOWN_CLIENT = new ClientID("joe-joe");
 
-    public static final AccountRef ACCOUNT_1 = AccountRef.from("12345");
-    public static final Money ACCOUNT_1_OPENING_BALANCE = Money.from(123.45);
-    public static final AccountName ACCOUNT_1_NAME = AccountName.from("Current Account");
-    public static final AccountRef ACCOUNT_2 = AccountRef.from("12346");
-    public static final Money ACCOUNT_2_OPENING_BALANCE = Money.from(12345.67);
-    public static final AccountName ACCOUNT_2_NAME = AccountName.from("Cheque Account");
-    public static final AccountRef UNKNOWN_ACCOUNT = AccountRef.from("12347");
-    public static final Money PAYMENT_AMOUNT = Money.from(12.00);
-    public static final Money ILLEGAL_PAYMENT_AMOUNT = Money.from(12345.00);
-    public static final TransactionDescription PAYMENT_DESCRIPTION = TransactionDescription.from("Test Payment");
+    public static final AccountRef ACCOUNT_1 = new AccountRef("12345");
+    public static final Money ACCOUNT_1_OPENING_BALANCE = new Money(123.45);
+    public static final AccountName ACCOUNT_1_NAME = new AccountName("Current Account");
+    public static final AccountRef ACCOUNT_2 = new AccountRef("12346");
+    public static final Money ACCOUNT_2_OPENING_BALANCE = new Money(12345.67);
+    public static final AccountName ACCOUNT_2_NAME = new AccountName("Cheque Account");
+    public static final AccountRef UNKNOWN_ACCOUNT = new AccountRef("12347");
+    public static final Money PAYMENT_AMOUNT = new Money(12.00);
+    public static final Money ILLEGAL_PAYMENT_AMOUNT = new Money(12345.00);
+    public static final TransactionDescription PAYMENT_DESCRIPTION = new TransactionDescription("Test Payment");
 
     private TransferService transferService = new TransferService();
     private EventStore eventStore = new EventStore();

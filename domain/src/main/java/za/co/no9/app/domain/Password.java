@@ -5,12 +5,8 @@ import static za.co.no9.app.util.Validation.validate;
 public class Password {
     private final String password;
 
-    private Password(String password) {
+    public Password(String password) {
         this.password = validate(password, "password").minimumLength(5).get();
-    }
-
-    public static Password from(String password) {
-        return new Password(password);
     }
 
     @Override

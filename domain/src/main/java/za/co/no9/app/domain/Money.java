@@ -9,8 +9,8 @@ public class Money {
         this.value = value;
     }
 
-    public static Money from(double value) {
-        return new Money(BigDecimal.valueOf(value));
+    public Money(double value) {
+        this.value = BigDecimal.valueOf(value);
     }
 
     public boolean greaterThan(Money balance) {

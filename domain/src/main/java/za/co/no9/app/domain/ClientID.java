@@ -5,12 +5,8 @@ import static za.co.no9.app.util.Validation.validate;
 public class ClientID {
     private final String value;
 
-    private ClientID(String value) {
+    public ClientID(String value) {
         this.value = validate(value, "value").minimumLength(5).get();
-    }
-
-    public static ClientID from(String value) {
-        return new ClientID(value);
     }
 
     @Override
