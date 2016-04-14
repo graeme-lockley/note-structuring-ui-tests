@@ -1,4 +1,8 @@
-package za.co.no9.app.domain;
+package za.co.no9.app.read;
+
+import za.co.no9.app.domain.Money;
+import za.co.no9.app.domain.TransactionDescription;
+import za.co.no9.app.domain.TransactionRef;
 
 import java.util.Date;
 
@@ -11,7 +15,7 @@ public class Transaction {
     private final Money amount;
     private final boolean isDebit;
 
-    private Transaction(Date when, TransactionRef reference, TransactionDescription description, Money amount, boolean isDebit) {
+    public Transaction(Date when, TransactionRef reference, TransactionDescription description, Money amount, boolean isDebit) {
         this.when = validate(when).notNull().get();
         this.reference = validate(reference).notNull().get();
         this.description = validate(description).notNull().get();
