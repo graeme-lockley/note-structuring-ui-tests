@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.*;
+import static za.co.no9.app.domain.Currency.ZAR;
 
 public class TransferServiceTest {
     public static final ClientID VALID_CLIENT = new ClientID("mary-anne");
@@ -19,14 +20,14 @@ public class TransferServiceTest {
     public static final ClientID UNKNOWN_CLIENT = new ClientID("joe-joe");
 
     public static final AccountRef ACCOUNT_1 = new AccountRef("12345");
-    public static final Money ACCOUNT_1_OPENING_BALANCE = new Money(123.45);
+    public static final Money ACCOUNT_1_OPENING_BALANCE = new Money(ZAR, 123.45);
     public static final AccountName ACCOUNT_1_NAME = new AccountName("Current Account");
     public static final AccountRef ACCOUNT_2 = new AccountRef("12346");
-    public static final Money ACCOUNT_2_OPENING_BALANCE = new Money(12345.67);
+    public static final Money ACCOUNT_2_OPENING_BALANCE = new Money(ZAR, 12345.67);
     public static final AccountName ACCOUNT_2_NAME = new AccountName("Cheque Account");
     public static final AccountRef UNKNOWN_ACCOUNT = new AccountRef("12347");
-    public static final Money PAYMENT_AMOUNT = new Money(12.00);
-    public static final Money ILLEGAL_PAYMENT_AMOUNT = new Money(12345.00);
+    public static final Money PAYMENT_AMOUNT = new Money(ZAR, 12.00);
+    public static final Money ILLEGAL_PAYMENT_AMOUNT = new Money(ZAR, 12345.00);
     public static final TransactionDescription PAYMENT_DESCRIPTION = new TransactionDescription("Test Payment");
 
     private TransferService transferService = new TransferService();

@@ -3,12 +3,18 @@ package za.co.no9.app.util;
 import java.util.Optional;
 
 public class Validation {
-    public static StringValidation validate(String value, String name) {
+    public static StringValidation value(String value, String name) {
         return new StringValidation(value, Optional.of(name));
     }
 
-    public static <T> ObjectValidation<T> validate(T value) {
-        return new ObjectValidation<T>(value);
+    public static <T> ObjectValidation<T> value(T value) {
+        return new ObjectValidation<>(value);
+    }
+
+    public static void validate(boolean predicate, String message) {
+        if (!predicate) {
+            throw new IllegalArgumentException(message);
+        }
     }
 
     public static class StringValidation extends Validation {

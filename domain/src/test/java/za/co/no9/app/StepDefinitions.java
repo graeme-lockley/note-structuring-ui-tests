@@ -8,6 +8,7 @@ import za.co.no9.app.aggregate.client.ClientService;
 import za.co.no9.app.aggregate.client.Credential;
 import za.co.no9.app.aggregate.transfer.TransferService;
 import za.co.no9.app.domain.ClientID;
+import za.co.no9.app.domain.Money;
 import za.co.no9.app.domain.Password;
 import za.co.no9.app.util.DI;
 import za.co.no9.app.util.EventStore;
@@ -50,5 +51,10 @@ public class StepDefinitions {
             assertTrue(this.loginResult.isPresent());
             assertEquals(this.loginResult.get().name(), loginResult);
         }
+    }
+
+    @Given("^the client (.+) has the current account (.+) with opening balance (.+)$")
+    public void the_client_andrew_has_the_current_account_with_opening_balance_(String clientRef, String accountRef, String openBalance) throws Throwable {
+        Money money = Money.from(openBalance);
     }
 }

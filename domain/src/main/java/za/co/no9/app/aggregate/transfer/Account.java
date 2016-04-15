@@ -2,16 +2,15 @@ package za.co.no9.app.aggregate.transfer;
 
 import za.co.no9.app.domain.AccountRef;
 import za.co.no9.app.domain.Money;
-
-import static za.co.no9.app.util.Validation.validate;
+import za.co.no9.app.util.Validation;
 
 public class Account {
     private final AccountRef reference;
     private Money balance;
 
     private Account(AccountRef reference, Money balance) {
-        this.reference = validate(reference).notNull().get();
-        this.balance = validate(balance).notNull().get();
+        this.reference = Validation.value(reference).notNull().get();
+        this.balance = Validation.value(balance).notNull().get();
     }
 
     public static Account from(AccountRef reference, Money balance) {

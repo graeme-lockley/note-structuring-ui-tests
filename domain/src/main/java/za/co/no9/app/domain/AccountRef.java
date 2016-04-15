@@ -1,12 +1,12 @@
 package za.co.no9.app.domain;
 
-import static za.co.no9.app.util.Validation.validate;
+import za.co.no9.app.util.Validation;
 
 public final class AccountRef {
     private final String value;
 
     public AccountRef(String value) {
-        this.value = validate(value, "value").minimumLength(5).get();
+        this.value = Validation.value(value, "value").minimumLength(5).get();
     }
 
     @Override

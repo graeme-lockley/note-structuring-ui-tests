@@ -1,12 +1,12 @@
 package za.co.no9.app.domain;
 
-import static za.co.no9.app.util.Validation.validate;
+import za.co.no9.app.util.Validation;
 
 public class Password {
     private final String password;
 
     public Password(String password) {
-        this.password = validate(password, "password").minimumLength(5).get();
+        this.password = Validation.value(password, "password").minimumLength(5).get();
     }
 
     @Override

@@ -2,16 +2,15 @@ package za.co.no9.app.aggregate.client;
 
 import za.co.no9.app.domain.ClientID;
 import za.co.no9.app.domain.Password;
-
-import static za.co.no9.app.util.Validation.validate;
+import za.co.no9.app.util.Validation;
 
 public class Client {
     private final ClientID clientID;
     private final Password password;
 
     private Client(ClientID clientID, Password password) {
-        this.clientID = validate(clientID).notNull().get();
-        this.password = validate(password).notNull().get();
+        this.clientID = Validation.value(clientID).notNull().get();
+        this.password = Validation.value(password).notNull().get();
     }
 
     public static Client from(ClientID clientID, Password password) {

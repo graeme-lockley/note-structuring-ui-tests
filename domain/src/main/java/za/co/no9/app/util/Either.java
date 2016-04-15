@@ -1,7 +1,5 @@
 package za.co.no9.app.util;
 
-import static za.co.no9.app.util.Validation.validate;
-
 public abstract class Either<T, U> {
     public abstract boolean isLeft();
 
@@ -12,7 +10,7 @@ public abstract class Either<T, U> {
     public abstract U right();
 
     public static <T, U> Either<T, U> left(final T t) {
-        validate(t).notNull();
+        Validation.value(t).notNull();
 
         return new Either<T, U>() {
             @Override
@@ -42,7 +40,7 @@ public abstract class Either<T, U> {
         };
     }
     public static <T, U> Either<T, U> right(final U u) {
-        validate(u).notNull();
+        Validation.value(u).notNull();
 
         return new Either<T, U>() {
             @Override

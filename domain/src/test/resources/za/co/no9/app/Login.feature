@@ -1,4 +1,6 @@
-Feature: In order to protect our client's accounts and to manage our financial and brand risk it is necessary that
+Feature: Client Login
+
+  In order to protect our client's accounts and to manage our financial and brand risk it is necessary that
   clients login to the application using a credential set of user name and password.
 
   Scenario: Successful login

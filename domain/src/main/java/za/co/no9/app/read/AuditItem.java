@@ -4,10 +4,9 @@ import za.co.no9.app.domain.AccountRef;
 import za.co.no9.app.domain.Money;
 import za.co.no9.app.domain.TransactionDescription;
 import za.co.no9.app.domain.TransactionRef;
+import za.co.no9.app.util.Validation;
 
 import java.util.Date;
-
-import static za.co.no9.app.util.Validation.validate;
 
 public class AuditItem {
     private final Date when;
@@ -24,11 +23,11 @@ public class AuditItem {
             Money amount,
             TransactionRef reference,
             TransactionDescription description) {
-        this.when = validate(when).notNull().get();
-        this.from = validate(from).notNull().get();
-        this.to = validate(to).notNull().get();
-        this.amount = validate(amount).notNull().get();
-        this.reference = validate(reference).notNull().get();
-        this.description = validate(description).notNull().get();
+        this.when = Validation.value(when).notNull().get();
+        this.from = Validation.value(from).notNull().get();
+        this.to = Validation.value(to).notNull().get();
+        this.amount = Validation.value(amount).notNull().get();
+        this.reference = Validation.value(reference).notNull().get();
+        this.description = Validation.value(description).notNull().get();
     }
 }
