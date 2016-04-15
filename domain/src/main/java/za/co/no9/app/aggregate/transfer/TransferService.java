@@ -31,7 +31,13 @@ public class TransferService {
                 failures.add(PaymentServiceFailure.INSUFFICIENT_FUNDS);
             }
             if (!destinationAccount.isPresent()) {
-                failures.add(PaymentServiceFailure.UNKNOWN_DESTINATION_ACCOUNT);
+                failures.add(PaymentServiceFailure.UNKNOWN_TARGET_ACCOUNT);
+            }
+
+            if (sourceAccount.isPresent() && destinationAccount.isPresent()) {
+                if (!sourceAccount.get().currency().equals(destinationAccount.get().currency())) {
+                    failures.add(PaymentServiceFailure.CURRENCY_MISMATCH);
+                }
             }
         } else {
             failures.add(PaymentServiceFailure.UNKNOWN_CLIENT);
@@ -72,7 +78,7 @@ public class TransferService {
         return clients.get(clientID);
     }
 
-    enum PaymentServiceFailure {
-        UNKNOWN_CLIENT, UNKNOWN_SOURCE_ACCOUNT, UNKNOWN_DESTINATION_ACCOUNT, INSUFFICIENT_FUNDS
+    public enum PaymentServiceFailure {
+        UNKNOWN_CLIENT, UNKNOWN_SOURCE_ACCOUNT, UNKNOWN_TARGET_ACCOUNT, INSUFFICIENT_FUNDS, CURRENCY_MISMATCH
     }
 }

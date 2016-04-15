@@ -27,12 +27,12 @@ Feature: Inter-account Funds Transfer
     Then the transfer fails with the error CURRENCY_MISMATCH
 
   Scenario: Successful transfer
-    When andrew transfers R100.00 from 10001235 to 10001236 with reference "Test Payment"
+    When andrew transfers R100.00 from 10001235 to 10001236 with description "Test Payment"
     Then the transfer succeeds
     And the account 10001235 has a balance of R23.45
     And the account 10001236 has a balance of R100.00
-    And the account 10001235 has a debit transaction of R100.00 with reference "Test Payment"
-    And the account 10001236 has a credit transaction of R100.00 with reference "Test Payment"
+    And the account 10001235 has a debit transaction of R100.00 with description "Test Payment"
+    And the account 10001236 has a credit transaction of R100.00 with description "Test Payment"
     And andrew has an inter account transfer audit trail item:
       | name           | value        |
       | amount         | R100.00      |

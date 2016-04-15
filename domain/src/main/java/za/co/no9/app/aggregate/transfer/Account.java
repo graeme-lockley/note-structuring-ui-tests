@@ -1,6 +1,7 @@
 package za.co.no9.app.aggregate.transfer;
 
 import za.co.no9.app.domain.AccountRef;
+import za.co.no9.app.domain.Currency;
 import za.co.no9.app.domain.Money;
 import za.co.no9.app.util.Validation;
 
@@ -35,5 +36,9 @@ public class Account {
 
     public Money balance() {
         return balance;
+    }
+
+    public Currency currency() {
+        return balance.currency();
     }
 }

@@ -69,7 +69,7 @@ public class TransferServiceTest {
         final Optional<Set<TransferService.PaymentServiceFailure>> failures = transferService.interAccountTransfer(new InterAccountTransferCommand(VALID_CLIENT, ACCOUNT_1, UNKNOWN_ACCOUNT, PAYMENT_AMOUNT, PAYMENT_DESCRIPTION));
 
         assertTrue(failures.isPresent());
-        assertTrue(failures.get().contains(TransferService.PaymentServiceFailure.UNKNOWN_DESTINATION_ACCOUNT));
+        assertTrue(failures.get().contains(TransferService.PaymentServiceFailure.UNKNOWN_TARGET_ACCOUNT));
         assertEquals(1, failures.get().size());
     }
 

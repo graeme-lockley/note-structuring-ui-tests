@@ -8,22 +8,37 @@ import za.co.no9.app.domain.TransactionRef;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Account {
     private final AccountRef reference;
-    private final Money openingBalance;
+    private Money balance;
     private final List<Transaction> transactions = new ArrayList<>();
 
     public Account(AccountRef reference, Money openingBalance) {
         this.reference = reference;
-        this.openingBalance = openingBalance;
+        this.balance = openingBalance;
     }
 
     public void debit(Date when, TransactionRef reference, TransactionDescription description, Money amount) {
+        balance = balance.subtract(amount);
         transactions.add(new Transaction(when, reference, description, amount, true));
     }
 
     public void credit(Date when, TransactionRef reference, TransactionDescription description, Money amount) {
+        balance = balance.add(amount);
         transactions.add(new Transaction(when, reference, description, amount, false));
+    }
+
+    public AccountRef reference() {
+        return reference;
+    }
+
+    public Money balance() {
+        return balance;
+    }
+
+    public Stream<Transaction> transactions() {
+        return transactions.stream();
     }
 }

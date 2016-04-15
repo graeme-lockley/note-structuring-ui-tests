@@ -68,6 +68,10 @@ public class Money {
         return currency.format(value);
     }
 
+    public Currency currency() {
+        return currency;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,9 +79,7 @@ public class Money {
 
         Money money = (Money) o;
 
-        if (currency != money.currency) return false;
-        return value.equals(money.value);
-
+        return currency == money.currency && value.equals(money.value);
     }
 
     @Override
