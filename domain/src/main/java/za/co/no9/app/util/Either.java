@@ -2,6 +2,7 @@ package za.co.no9.app.util;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public abstract class Either<T, U> {
@@ -29,6 +30,14 @@ public abstract class Either<T, U> {
 
     public static <T, U> Either<T, U> right(final U u) {
         return new EitherRight<>(u);
+    }
+
+    public static <L, R> Either<L, R> rightElse(Optional<R> rOptional, L l) {
+        if (rOptional.isPresent()) {
+            return Either.right(rOptional.get());
+        } else {
+            return Either.left(l);
+        }
     }
 
     private static class EitherLeft<L, R> extends Either<L, R> {
