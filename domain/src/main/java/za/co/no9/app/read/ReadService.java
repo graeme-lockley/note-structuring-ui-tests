@@ -7,6 +7,7 @@ import za.co.no9.app.event.AccountAdded;
 import za.co.no9.app.event.ClientAdded;
 import za.co.no9.app.event.InterAccountTransferred;
 import za.co.no9.app.util.DI;
+import za.co.no9.app.util.Either;
 import za.co.no9.app.util.EventStore;
 
 import java.util.HashMap;
@@ -31,15 +32,37 @@ public class ReadService {
         DI.get(EventStore.class).processEvent(client, event);
     }
 
-    public Money accountBalance(AccountRef accountRef) {
-        return accounts.get(accountRef).balance();
+    public Either<ReadServiceFailure, Money> accountBalance(AccountRef accountRef) {
+        return getAccount(accountRef).mapRight(Account::balance);
     }
 
-    public Stream<Transaction> accountTransactions(AccountRef accountRef) {
-        return accounts.get(accountRef).transactions();
+    public Either<ReadServiceFailure, Stream<Transaction>> accountTransactions(AccountRef accountRef) {
+        return getAccount(accountRef).mapRight(Account::transactions);
     }
 
-    public Stream<AuditItem> auditTrail(ClientID clientID) {
-        return clients.get(clientID).auditTrail();
+    private Either<ReadServiceFailure, Account> getAccount(AccountRef accountRef) {
+        final Account account = accounts.get(accountRef);
+        if (account == null) {
+            return Either.left(ReadServiceFailure.UNKNOWN_ACCOUNT_REF);
+        } else {
+            return Either.right(account);
+        }
+    }
+
+    public Either<ReadServiceFailure, Stream<AuditEntry>> auditTrail(ClientID clientID) {
+        return getClient(clientID).mapRight(Client::auditTrail);
+    }
+
+    private Either<ReadServiceFailure, Client> getClient(ClientID clientID) {
+        final Client client = clients.get(clientID);
+        if (client == null) {
+            return Either.left(ReadServiceFailure.UNKNOWN_CLIENT_ID);
+        } else {
+            return Either.right(client);
+        }
+    }
+
+    public enum ReadServiceFailure {
+        UNKNOWN_CLIENT_ID, UNKNOWN_ACCOUNT_REF
     }
 }

@@ -12,20 +12,23 @@ import za.co.no9.app.aggregate.client.Credential;
 import za.co.no9.app.aggregate.transfer.InterAccountTransferCommand;
 import za.co.no9.app.aggregate.transfer.TransferService;
 import za.co.no9.app.domain.*;
-import za.co.no9.app.read.AuditItem;
+import za.co.no9.app.read.AuditEntry;
 import za.co.no9.app.read.ReadService;
+import za.co.no9.app.read.Transaction;
 import za.co.no9.app.util.DI;
+import za.co.no9.app.util.Either;
 import za.co.no9.app.util.EventStore;
 import za.co.no9.app.util.Tuple;
 
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
 public class StepDefinitions {
-    private static Map<String, Predicate<Tuple<AuditItem, NameValue>>> AUDIT_TRAIL_FIELD_TESTS = new HashMap<>();
+    private static Map<String, Predicate<Tuple<AuditEntry, NameValue>>> AUDIT_TRAIL_FIELD_TESTS = new HashMap<>();
 
     static {
         AUDIT_TRAIL_FIELD_TESTS.put("amount", a -> a._1.amount.asString().equals(a._2.value));
@@ -50,9 +53,15 @@ public class StepDefinitions {
         DI.get(EventStore.class).registerEventHandler(DI.get(ReadService.class));
     }
 
-    @Given("^a registered client with the user name (.*) and password (.*)$")
+    @Given("^a registered client with the user name ([^ ]+) and password (.*)$")
     public void a_registered_client_with_the_user_name_andrew_and_password_password(String username, String password) throws Throwable {
         final Optional<ClientService.ClientServiceFailure> failure = DI.get(API.class).addClient(new AddClientCommand(new ClientID(username), new Password(password)));
+        assertFalse(failure.isPresent());
+    }
+
+    @Given("^a registered client with the user name ([^ ]+)$")
+    public void a_registered_client_with_the_user_name_andrew(String username) throws Throwable {
+        final Optional<ClientService.ClientServiceFailure> failure = DI.get(API.class).addClient(new AddClientCommand(new ClientID(username), new Password("password")));
         assertFalse(failure.isPresent());
     }
 
@@ -71,8 +80,8 @@ public class StepDefinitions {
         }
     }
 
-    @Given("^the client (.+) has the current account (.+) with opening balance (.+)$")
-    public void the_client_andrew_has_the_current_account_with_opening_balance_(String clientID, String accountRef, String openBalance) throws Throwable {
+    @Given("^(.+) has a current account (.+) with opening balance (.+)$")
+    public void client_has_a_current_account_with_opening_balance_(String clientID, String accountRef, String openBalance) throws Throwable {
         DI.get(API.class).addAccount(new AddAccountCommand(
                 new ClientID(clientID),
                 new AccountRef(accountRef),
@@ -109,7 +118,9 @@ public class StepDefinitions {
 
     @And("^the account (\\d+) has a balance of (.+)$")
     public void the_account_has_a_balance_of_R_(String accountRef, String accountBalance) throws Throwable {
-        assertEquals(Money.from(accountBalance), DI.get(API.class).accountBalance(new AccountRef(accountRef)));
+        final Either<ReadService.ReadServiceFailure, Money> accountBalanceEither = DI.get(API.class).accountBalance(new AccountRef(accountRef));
+        assertTrue(accountBalanceEither.toString(), accountBalanceEither.isRight());
+        assertEquals(Money.from(accountBalance), accountBalanceEither.right());
     }
 
     @Then("^the transfer fails with the error (.+)$")
@@ -129,25 +140,29 @@ public class StepDefinitions {
     }
 
     private void assertTransaction(AccountRef accountRef, boolean isDebit, Money amount, TransactionDescription description) throws Throwable {
-        assertTrue(DI.get(API.class).accountTransactions(accountRef).anyMatch(t -> t.isDebit == isDebit && t.amount.equals(amount) && t.description.equals(description)));
+        final Either<ReadService.ReadServiceFailure, Stream<Transaction>> accountTransactionsEither = DI.get(API.class).accountTransactions(accountRef);
+        assertTrue(accountTransactionsEither.toString(), accountTransactionsEither.isRight());
+        assertTrue(accountTransactionsEither.right().anyMatch(t -> t.isDebit == isDebit && t.amount.equals(amount) && t.description.equals(description)));
     }
 
-    @And("^([^ ]+) has an inter account transfer audit trail item:$")
+    @And("^([^ ]+) has an inter-account transfer audit entry:$")
     public void andrew_has_an_inter_account_transfer_audit_trail_item(String clientID, DataTable dataTable) throws Throwable {
         List<NameValue> items = dataTable.asList(NameValue.class);
-        assertTrue(DI.get(API.class).auditTrail(new ClientID(clientID)).anyMatch(a -> matchAuditTrail(a, items)));
+        final Either<ReadService.ReadServiceFailure, Stream<AuditEntry>> auditTrailEither = DI.get(API.class).auditTrail(new ClientID(clientID));
+        assertTrue(auditTrailEither.toString(), auditTrailEither.isRight());
+        assertTrue(auditTrailEither.right().anyMatch(auditEntry -> matchAuditEntry(auditEntry, items)));
     }
 
-    private boolean matchAuditTrail(AuditItem auditItem, List<NameValue> items) {
+    private boolean matchAuditEntry(AuditEntry auditEntry, Collection<NameValue> items) {
         boolean result = true;
         for (NameValue nameValue : items) {
-            final Predicate<Tuple<AuditItem, NameValue>> tuplePredicate = AUDIT_TRAIL_FIELD_TESTS.get(nameValue.name);
+            final Predicate<Tuple<AuditEntry, NameValue>> tuplePredicate = AUDIT_TRAIL_FIELD_TESTS.get(nameValue.name);
 
             if (tuplePredicate == null) {
                 fail("Unknown audit trail field: " + nameValue.name + ": Valid values: " + AUDIT_TRAIL_FIELD_TESTS.keySet().stream().collect(Collectors.joining(", ")));
                 result = false;
             } else {
-                result = result && tuplePredicate.test(Tuple.from(auditItem, nameValue));
+                result = result && tuplePredicate.test(Tuple.from(auditEntry, nameValue));
             }
         }
         return result;

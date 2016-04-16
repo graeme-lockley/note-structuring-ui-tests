@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 public class Client {
     private final Set<Account> accounts = new HashSet<>();
-    private final List<AuditItem> auditTrail = new ArrayList<>();
+    private final List<AuditEntry> auditTrail = new ArrayList<>();
 
     public Optional<Account> findAccount(AccountRef accountRef) {
         return accounts.stream().filter(x -> x.reference().equals(accountRef)).findFirst();
@@ -19,7 +19,7 @@ public class Client {
         accounts.add(new Account(reference, openingBalance));
     }
 
-    public Stream<AuditItem> auditTrail() {
+    public Stream<AuditEntry> auditTrail() {
         return auditTrail.stream();
     }
 
@@ -27,6 +27,6 @@ public class Client {
         findAccount(event.source).get().debit(event.when, event.reference, event.description, event.amount);
         findAccount(event.destination).get().credit(event.when, event.reference, event.description, event.amount);
 
-        auditTrail.add(new AuditItem(event.when, event.source, event.destination, event.amount, event.reference, event.description));
+        auditTrail.add(new AuditEntry(event.when, event.source, event.destination, event.amount, event.reference, event.description));
     }
 }

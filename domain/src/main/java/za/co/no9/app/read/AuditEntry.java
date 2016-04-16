@@ -8,7 +8,7 @@ import za.co.no9.app.util.Validation;
 
 import java.util.Date;
 
-public class AuditItem {
+public class AuditEntry {
     public final Date when;
     public final AccountRef sourceAccount;
     public final AccountRef destinationAccount;
@@ -16,7 +16,7 @@ public class AuditItem {
     public final TransactionRef reference;
     public final TransactionDescription description;
 
-    public AuditItem(
+    public AuditEntry(
             Date when,
             AccountRef sourceAccount,
             AccountRef destinationAccount,
