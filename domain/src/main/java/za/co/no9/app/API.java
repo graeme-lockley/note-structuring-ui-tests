@@ -3,13 +3,13 @@ package za.co.no9.app;
 import za.co.no9.app.aggregate.client.AddAccountCommand;
 import za.co.no9.app.aggregate.client.AddClientCommand;
 import za.co.no9.app.aggregate.client.ClientService;
-import za.co.no9.app.aggregate.client.Credential;
 import za.co.no9.app.aggregate.transfer.InterAccountTransferCommand;
 import za.co.no9.app.aggregate.transfer.TransferService;
 import za.co.no9.app.domain.AccountRef;
 import za.co.no9.app.domain.ClientID;
 import za.co.no9.app.domain.Money;
 import za.co.no9.app.read.AuditEntry;
+import za.co.no9.app.read.Credential;
 import za.co.no9.app.read.ReadService;
 import za.co.no9.app.read.Transaction;
 import za.co.no9.app.util.DI;
@@ -24,8 +24,8 @@ public class API {
         return DI.get(ClientService.class).addClient(command);
     }
 
-    public Optional<ClientService.ClientServiceFailure> login(Credential credential) {
-        return DI.get(ClientService.class).login(credential);
+    public Optional<ReadService.ReadServiceFailure> login(Credential credential) {
+        return DI.get(ReadService.class).login(credential);
     }
 
     public Optional<Set<TransferService.PaymentServiceFailure>> interAccountTransfer(InterAccountTransferCommand command) {

@@ -8,11 +8,11 @@ import cucumber.api.java.en.When;
 import za.co.no9.app.aggregate.client.AddAccountCommand;
 import za.co.no9.app.aggregate.client.AddClientCommand;
 import za.co.no9.app.aggregate.client.ClientService;
-import za.co.no9.app.aggregate.client.Credential;
 import za.co.no9.app.aggregate.transfer.InterAccountTransferCommand;
 import za.co.no9.app.aggregate.transfer.TransferService;
 import za.co.no9.app.domain.*;
 import za.co.no9.app.read.AuditEntry;
+import za.co.no9.app.read.Credential;
 import za.co.no9.app.read.ReadService;
 import za.co.no9.app.read.Transaction;
 import za.co.no9.app.util.DI;
@@ -37,7 +37,7 @@ public class StepDefinitions {
         AUDIT_TRAIL_FIELD_TESTS.put("destination account", a -> a._1.destinationAccount.asString().equals(a._2.value));
     }
 
-    private Optional<ClientService.ClientServiceFailure> loginResult;
+    private Optional<ReadService.ReadServiceFailure> loginResult;
     private Optional<Set<TransferService.PaymentServiceFailure>> transferResult;
 
     public StepDefinitions() {

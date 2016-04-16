@@ -31,30 +31,19 @@ public class ClientService {
         }
     }
 
+    private Optional<Client> findClient(ClientID clientID) {
+        return Optional.ofNullable(clients.get(clientID));
+    }
+
     private void apply(ClientAdded event) {
-        clients.put(event.clientID, Client.from(event.clientID, event.password));
+        clients.put(event.clientID, new Client());
     }
 
     private void apply(AccountAdded event) {
         DI.get(EventStore.class).processEvent(clients.get(event.clientID), event);
     }
 
-    public Optional<ClientServiceFailure> login(Credential credential) {
-        final Optional<Client> client = findClient(credential.clientID());
-        if (!client.isPresent()) {
-            return Optional.of(ClientServiceFailure.UNKNOWN_CLIENT);
-        } else if (client.get().acceptCredential(credential)) {
-            return Optional.empty();
-        } else {
-            return Optional.of(ClientServiceFailure.INVALID_CREDENTIAL);
-        }
-    }
-
-    public Optional<Client> findClient(ClientID clientID) {
-        return Optional.ofNullable(clients.get(clientID));
-    }
-
     public enum ClientServiceFailure {
-        DUPLICATE_CLIENT_ID, INVALID_CREDENTIAL, UNKNOWN_CLIENT, DUPLICATE_ACCOUNT_REF
+        DUPLICATE_CLIENT_ID, UNKNOWN_CLIENT, DUPLICATE_ACCOUNT_REF
     }
 }

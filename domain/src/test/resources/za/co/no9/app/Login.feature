@@ -10,7 +10,7 @@ Feature: Client Login
 
   Scenario: Unknown client login
     When I login with the credential andrew/password
-    Then the login result is UNKNOWN_CLIENT
+    Then the login result is UNKNOWN_CLIENT_ID
 
   Scenario: The correct user name is used but an incorrect password is applied
     Given a registered client with the user name andrew and password password

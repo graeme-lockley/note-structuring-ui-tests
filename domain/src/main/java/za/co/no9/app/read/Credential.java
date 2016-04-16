@@ -1,4 +1,4 @@
-package za.co.no9.app.aggregate.client;
+package za.co.no9.app.read;
 
 import za.co.no9.app.domain.ClientID;
 import za.co.no9.app.domain.Password;

@@ -3,6 +3,7 @@ package za.co.no9.app.read;
 import za.co.no9.app.domain.AccountRef;
 import za.co.no9.app.domain.ClientID;
 import za.co.no9.app.domain.Money;
+import za.co.no9.app.domain.Password;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,8 +15,8 @@ public class Clients {
         return clients.get(clientID);
     }
 
-    public void addClient(ClientID clientID) {
-        final Client client = new Client();
+    public void addClient(ClientID clientID, Password password) {
+        final Client client = new Client(clientID, password);
         clients.put(clientID, client);
     }
 
