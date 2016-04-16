@@ -37,7 +37,7 @@ public class StepDefinitions {
         AUDIT_TRAIL_FIELD_TESTS.put("destination account", a -> a._1.destinationAccount.asString().equals(a._2.value));
     }
 
-    private Optional<ReadService.ReadServiceFailure> loginResult;
+    private Optional<Boolean> loginResult = Optional.empty();
     private Optional<Set<TransferService.PaymentServiceFailure>> transferResult;
 
     public StepDefinitions() {
@@ -67,17 +67,19 @@ public class StepDefinitions {
 
     @When("^I login with the credential (.*)/(.*)")
     public void I_login_with_the_credential_andrew_password(String username, String password) throws Throwable {
-        loginResult = DI.get(API.class).login(Credential.from(new ClientID(username), new Password(password)));
+        loginResult = Optional.of(DI.get(API.class).login(Credential.from(new ClientID(username), new Password(password))));
     }
 
-    @Then("^the login result is (.*)$")
-    public void The_login_is_successful(String loginResult) throws Throwable {
-        if (loginResult.equalsIgnoreCase("successful")) {
-            assertFalse(this.loginResult.isPresent());
-        } else {
-            assertTrue(this.loginResult.isPresent());
-            assertEquals(this.loginResult.get().name(), loginResult);
-        }
+    @Then("^the login is successful$")
+    public void The_login_is_successful() throws Throwable {
+        assertTrue(loginResult.isPresent());
+        assertTrue(loginResult.get());
+    }
+
+    @Then("^the login is unsuccessful$")
+    public void The_login_is_unsuccessful() throws Throwable {
+        assertTrue(loginResult.isPresent());
+        assertFalse(loginResult.get());
     }
 
     @Given("^(.+) has a current account (.+) with opening balance (.+)$")

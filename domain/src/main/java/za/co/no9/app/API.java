@@ -24,7 +24,7 @@ public class API {
         return DI.get(ClientService.class).addClient(command);
     }
 
-    public Optional<ReadService.ReadServiceFailure> login(Credential credential) {
+    public boolean login(Credential credential) {
         return DI.get(ReadService.class).login(credential);
     }
 

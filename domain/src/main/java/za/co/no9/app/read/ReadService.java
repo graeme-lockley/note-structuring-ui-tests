@@ -12,7 +12,6 @@ import za.co.no9.app.util.EventStore;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 public class ReadService {
@@ -63,19 +62,11 @@ public class ReadService {
         }
     }
 
-    public Optional<ReadServiceFailure> login(Credential credential) {
-        final Either<ReadServiceFailure, Boolean> booleanEither = getClient(credential.clientID()).mapRight(c -> c.acceptCredential(credential));
-
-        if (booleanEither.isLeft()) {
-            return Optional.of(booleanEither.left());
-        } else if (booleanEither.right()) {
-            return Optional.empty();
-        } else {
-            return Optional.of(ReadServiceFailure.INVALID_CREDENTIAL);
-        }
+    public boolean login(Credential credential) {
+        return getClient(credential.clientID()).map(l -> false, c -> c.acceptCredential(credential));
     }
 
     public enum ReadServiceFailure {
-        UNKNOWN_CLIENT_ID, UNKNOWN_ACCOUNT_REF, INVALID_CREDENTIAL
+        UNKNOWN_CLIENT_ID, UNKNOWN_ACCOUNT_REF
     }
 }

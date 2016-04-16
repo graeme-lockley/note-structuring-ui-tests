@@ -6,13 +6,13 @@ Feature: Client Login
   Scenario: Successful login
     Given a registered client with the user name andrew and password password
     When I login with the credential andrew/password
-    Then the login result is successful
+    Then the login is successful
 
   Scenario: Unknown client login
     When I login with the credential andrew/password
-    Then the login result is UNKNOWN_CLIENT_ID
+    Then the login is unsuccessful
 
   Scenario: The correct user name is used but an incorrect password is applied
     Given a registered client with the user name andrew and password password
     When I login with the credential andrew/wrongpassword
-    Then the login result is INVALID_CREDENTIAL
+    Then the login is unsuccessful

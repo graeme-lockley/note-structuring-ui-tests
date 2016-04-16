@@ -15,9 +15,18 @@ public abstract class Either<T, U> {
 
     public abstract <V> Either<T, V> mapRight(Function<U, V> map);
 
+    public <V> V map(Function<T, V> leftMap, Function<U, V> rightMap) {
+        if (isLeft()) {
+            return leftMap.apply(left());
+        } else {
+            return rightMap.apply(right());
+        }
+    }
+
     public static <T, U> Either<T, U> left(final T t) {
         return new EitherLeft<>(t);
     }
+
     public static <T, U> Either<T, U> right(final U u) {
         return new EitherRight<>(u);
     }
