@@ -13,13 +13,13 @@ public abstract class Either<T, U> {
 
     public abstract U right();
 
-    public abstract <V> Either<T, V> mapRight(Function<U, V> map);
+    public abstract <V> Either<T, V> foldRight(Function<U, V> fold);
 
-    public <V> V map(Function<T, V> leftMap, Function<U, V> rightMap) {
+    public <V> V fold(Function<T, V> leftFold, Function<U, V> rightFold) {
         if (isLeft()) {
-            return leftMap.apply(left());
+            return leftFold.apply(left());
         } else {
-            return rightMap.apply(right());
+            return rightFold.apply(right());
         }
     }
 
@@ -59,7 +59,7 @@ public abstract class Either<T, U> {
         }
 
         @Override
-        public <V> Either<L, V> mapRight(Function<R, V> map) {
+        public <V> Either<L, V> foldRight(Function<R, V> fold) {
             return new EitherLeft<>(l);
         }
 
@@ -99,8 +99,8 @@ public abstract class Either<T, U> {
         }
 
         @Override
-        public <V> Either<L, V> mapRight(Function<R, V> map) {
-            return new EitherRight<>(map.apply(r));
+        public <V> Either<L, V> foldRight(Function<R, V> fold) {
+            return new EitherRight<>(fold.apply(r));
         }
 
         @Override

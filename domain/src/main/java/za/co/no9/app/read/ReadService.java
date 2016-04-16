@@ -33,11 +33,11 @@ public class ReadService {
     }
 
     public Either<ReadServiceFailure, Money> accountBalance(AccountRef accountRef) {
-        return getAccount(accountRef).mapRight(Account::balance);
+        return getAccount(accountRef).foldRight(Account::balance);
     }
 
     public Either<ReadServiceFailure, Stream<Transaction>> accountTransactions(AccountRef accountRef) {
-        return getAccount(accountRef).mapRight(Account::transactions);
+        return getAccount(accountRef).foldRight(Account::transactions);
     }
 
     private Either<ReadServiceFailure, Account> getAccount(AccountRef accountRef) {
@@ -50,7 +50,7 @@ public class ReadService {
     }
 
     public Either<ReadServiceFailure, Stream<AuditEntry>> auditTrail(ClientID clientID) {
-        return getClient(clientID).mapRight(Client::auditTrail);
+        return getClient(clientID).foldRight(Client::auditTrail);
     }
 
     private Either<ReadServiceFailure, Client> getClient(ClientID clientID) {
@@ -63,7 +63,7 @@ public class ReadService {
     }
 
     public boolean login(Credential credential) {
-        return getClient(credential.clientID()).map(l -> false, c -> c.acceptCredential(credential));
+        return getClient(credential.clientID()).fold(l -> false, c -> c.acceptCredential(credential));
     }
 
     public enum ReadServiceFailure {
