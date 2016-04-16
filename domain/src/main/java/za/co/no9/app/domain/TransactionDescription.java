@@ -17,6 +17,10 @@ public final class TransactionDescription {
                 .build();
     }
 
+    public String asString() {
+        return value;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

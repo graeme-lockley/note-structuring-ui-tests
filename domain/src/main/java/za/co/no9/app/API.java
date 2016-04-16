@@ -7,7 +7,9 @@ import za.co.no9.app.aggregate.client.Credential;
 import za.co.no9.app.aggregate.transfer.InterAccountTransferCommand;
 import za.co.no9.app.aggregate.transfer.TransferService;
 import za.co.no9.app.domain.AccountRef;
+import za.co.no9.app.domain.ClientID;
 import za.co.no9.app.domain.Money;
+import za.co.no9.app.read.AuditItem;
 import za.co.no9.app.read.ReadService;
 import za.co.no9.app.read.Transaction;
 import za.co.no9.app.util.DI;
@@ -41,5 +43,10 @@ public class API {
     // TODO Add an Either return type
     public Stream<Transaction> accountTransactions(AccountRef accountRef) {
         return DI.get(ReadService.class).accountTransactions(accountRef);
+    }
+
+    // TODO Add an Either return type
+    public Stream<AuditItem> auditTrail(ClientID clientID) {
+        return DI.get(ReadService.class).auditTrail(clientID);
     }
 }

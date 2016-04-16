@@ -1,10 +1,13 @@
 package za.co.no9.app.read;
 
 import za.co.no9.app.domain.AccountRef;
+import za.co.no9.app.domain.ClientID;
 import za.co.no9.app.domain.Money;
 import za.co.no9.app.event.AccountAdded;
 import za.co.no9.app.event.ClientAdded;
 import za.co.no9.app.event.InterAccountTransferred;
+import za.co.no9.app.util.DI;
+import za.co.no9.app.util.EventStore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +28,7 @@ public class ReadService {
 
     private void apply(InterAccountTransferred event) {
         final Client client = clients.get(event.clientID);
-        client.findAccount(event.source).get().debit(event.when, event.reference, event.description, event.amount);
-        client.findAccount(event.destination).get().credit(event.when, event.reference, event.description, event.amount);
+        DI.get(EventStore.class).processEvent(client, event);
     }
 
     public Money accountBalance(AccountRef accountRef) {
@@ -35,5 +37,9 @@ public class ReadService {
 
     public Stream<Transaction> accountTransactions(AccountRef accountRef) {
         return accounts.get(accountRef).transactions();
+    }
+
+    public Stream<AuditItem> auditTrail(ClientID clientID) {
+        return clients.get(clientID).auditTrail();
     }
 }

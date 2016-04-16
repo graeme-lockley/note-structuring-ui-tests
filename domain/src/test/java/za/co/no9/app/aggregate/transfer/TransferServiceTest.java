@@ -65,11 +65,11 @@ public class TransferServiceTest {
     }
 
     @Test
-    public void given_an_unknown_target_account_should_fail_with_error() throws Exception {
+    public void given_an_unknown_destination_account_should_fail_with_error() throws Exception {
         final Optional<Set<TransferService.PaymentServiceFailure>> failures = transferService.interAccountTransfer(new InterAccountTransferCommand(VALID_CLIENT, ACCOUNT_1, UNKNOWN_ACCOUNT, PAYMENT_AMOUNT, PAYMENT_DESCRIPTION));
 
         assertTrue(failures.isPresent());
-        assertTrue(failures.get().contains(TransferService.PaymentServiceFailure.UNKNOWN_TARGET_ACCOUNT));
+        assertTrue(failures.get().contains(TransferService.PaymentServiceFailure.UNKNOWN_DESTINATION_ACCOUNT));
         assertEquals(1, failures.get().size());
     }
 

@@ -14,4 +14,8 @@ public final class TransactionRef {
     public boolean isLessThan(TransactionRef transactionRef) {
         return value < transactionRef.value;
     }
+
+    public String asString() {
+        return Long.toString(value);
+    }
 }

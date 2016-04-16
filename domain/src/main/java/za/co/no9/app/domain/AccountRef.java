@@ -1,5 +1,6 @@
 package za.co.no9.app.domain;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import za.co.no9.app.util.Validation;
 
 public final class AccountRef {
@@ -7,6 +8,17 @@ public final class AccountRef {
 
     public AccountRef(String value) {
         this.value = Validation.value(value, "value").minimumLength(5).get();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("value", value)
+                .build();
+    }
+
+    public String asString() {
+        return value;
     }
 
     @Override

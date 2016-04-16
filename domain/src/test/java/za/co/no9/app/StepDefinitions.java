@@ -12,17 +12,28 @@ import za.co.no9.app.aggregate.client.Credential;
 import za.co.no9.app.aggregate.transfer.InterAccountTransferCommand;
 import za.co.no9.app.aggregate.transfer.TransferService;
 import za.co.no9.app.domain.*;
+import za.co.no9.app.read.AuditItem;
 import za.co.no9.app.read.ReadService;
 import za.co.no9.app.util.DI;
 import za.co.no9.app.util.EventStore;
+import za.co.no9.app.util.Tuple;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
 public class StepDefinitions {
+    private static Map<String, Predicate<Tuple<AuditItem, NameValue>>> AUDIT_TRAIL_FIELD_TESTS = new HashMap<>();
+
+    static {
+        AUDIT_TRAIL_FIELD_TESTS.put("amount", a -> a._1.amount.asString().equals(a._2.value));
+        AUDIT_TRAIL_FIELD_TESTS.put("description", a -> a._1.description.asString().equals(a._2.value));
+        AUDIT_TRAIL_FIELD_TESTS.put("source account", a -> a._1.sourceAccount.asString().equals(a._2.value));
+        AUDIT_TRAIL_FIELD_TESTS.put("destination account", a -> a._1.destinationAccount.asString().equals(a._2.value));
+    }
+
     private Optional<ClientService.ClientServiceFailure> loginResult;
     private Optional<Set<TransferService.PaymentServiceFailure>> transferResult;
 
@@ -70,22 +81,22 @@ public class StepDefinitions {
     }
 
     @When("^(.+) transfers (.+) from (.+) to ([^ ]+) with description \"(.+)\"$")
-    public void andrew_transfers_R_from_to(String clientID, String transferAmount, String sourceAccountRef, String targetAccountRef, String description) throws Throwable {
+    public void andrew_transfers_R_from_to(String clientID, String transferAmount, String sourceAccountRef, String destinationAccountRef, String description) throws Throwable {
         transferResult = DI.get(API.class).interAccountTransfer(new InterAccountTransferCommand(
                 new ClientID(clientID),
                 new AccountRef(sourceAccountRef),
-                new AccountRef(targetAccountRef),
+                new AccountRef(destinationAccountRef),
                 Money.from(transferAmount),
                 new TransactionDescription(description)
         ));
     }
 
     @When("^(.+) transfers (.+) from (.+) to ([^ ]+)$")
-    public void andrew_transfers_R_from_to(String clientID, String transferAmount, String sourceAccountRef, String targetAccountRef) throws Throwable {
+    public void andrew_transfers_R_from_to(String clientID, String transferAmount, String sourceAccountRef, String destinationAccountRef) throws Throwable {
         transferResult = DI.get(API.class).interAccountTransfer(new InterAccountTransferCommand(
                 new ClientID(clientID),
                 new AccountRef(sourceAccountRef),
-                new AccountRef(targetAccountRef),
+                new AccountRef(destinationAccountRef),
                 Money.from(transferAmount),
                 new TransactionDescription("Default")
         ));
@@ -124,5 +135,21 @@ public class StepDefinitions {
     @And("^([^ ]+) has an inter account transfer audit trail item:$")
     public void andrew_has_an_inter_account_transfer_audit_trail_item(String clientID, DataTable dataTable) throws Throwable {
         List<NameValue> items = dataTable.asList(NameValue.class);
+        assertTrue(DI.get(API.class).auditTrail(new ClientID(clientID)).anyMatch(a -> matchAuditTrail(a, items)));
+    }
+
+    private boolean matchAuditTrail(AuditItem auditItem, List<NameValue> items) {
+        boolean result = true;
+        for (NameValue nameValue : items) {
+            final Predicate<Tuple<AuditItem, NameValue>> tuplePredicate = AUDIT_TRAIL_FIELD_TESTS.get(nameValue.name);
+
+            if (tuplePredicate == null) {
+                fail("Unknown audit trail field: " + nameValue.name + ": Valid values: " + AUDIT_TRAIL_FIELD_TESTS.keySet().stream().collect(Collectors.joining(", ")));
+                result = false;
+            } else {
+                result = result && tuplePredicate.test(Tuple.from(auditItem, nameValue));
+            }
+        }
+        return result;
     }
 }

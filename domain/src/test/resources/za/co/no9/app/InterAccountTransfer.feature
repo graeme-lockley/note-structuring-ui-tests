@@ -9,10 +9,10 @@ Feature: Inter-account Funds Transfer
     And the client andrew has the current account 10001236 with opening balance R0.00
     And the client andrew has the current account 10001237 with opening balance USD0.00
 
-  Scenario: Unknown source and target accounts
+  Scenario: Unknown source and destination accounts
     When andrew transfers R12.00 from 10001000 to 10001001
     Then the transfer fails with the error UNKNOWN_SOURCE_ACCOUNT
-    And the transfer fails with the error UNKNOWN_TARGET_ACCOUNT
+    And the transfer fails with the error UNKNOWN_DESTINATION_ACCOUNT
 
   Scenario: Unknown client
     When rodger transfers R12.00 from 10001000 to 1001001
@@ -34,8 +34,8 @@ Feature: Inter-account Funds Transfer
     And the account 10001235 has a debit transaction of R100.00 with description "Test Payment"
     And the account 10001236 has a credit transaction of R100.00 with description "Test Payment"
     And andrew has an inter account transfer audit trail item:
-      | name           | value        |
-      | amount         | R100.00      |
-      | reference      | Test Payment |
-      | source account | 10001235     |
-      | target account | 10001236     |
+      | name                | value        |
+      | amount              | ZAR100.00    |
+      | description         | Test Payment |
+      | source account      | 10001235     |
+      | destination account | 10001236     |

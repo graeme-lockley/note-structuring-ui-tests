@@ -31,7 +31,7 @@ public class TransferService {
                 failures.add(PaymentServiceFailure.INSUFFICIENT_FUNDS);
             }
             if (!destinationAccount.isPresent()) {
-                failures.add(PaymentServiceFailure.UNKNOWN_TARGET_ACCOUNT);
+                failures.add(PaymentServiceFailure.UNKNOWN_DESTINATION_ACCOUNT);
             }
 
             if (sourceAccount.isPresent() && destinationAccount.isPresent()) {
@@ -79,6 +79,6 @@ public class TransferService {
     }
 
     public enum PaymentServiceFailure {
-        UNKNOWN_CLIENT, UNKNOWN_SOURCE_ACCOUNT, UNKNOWN_TARGET_ACCOUNT, INSUFFICIENT_FUNDS, CURRENCY_MISMATCH
+        UNKNOWN_CLIENT, UNKNOWN_SOURCE_ACCOUNT, UNKNOWN_DESTINATION_ACCOUNT, INSUFFICIENT_FUNDS, CURRENCY_MISMATCH
     }
 }
