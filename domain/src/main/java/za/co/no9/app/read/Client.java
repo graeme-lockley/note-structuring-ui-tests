@@ -1,9 +1,9 @@
 package za.co.no9.app.read;
 
 import za.co.no9.app.domain.AccountRef;
-import za.co.no9.app.domain.ClientID;
 import za.co.no9.app.domain.Money;
 import za.co.no9.app.domain.Password;
+import za.co.no9.app.domain.UserName;
 import za.co.no9.app.event.InterAccountTransferred;
 import za.co.no9.app.util.Validation;
 
@@ -11,14 +11,14 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class Client {
-    private final ClientID clientID;
+    private final UserName userName;
     private final Password password;
 
     private final Set<Account> accounts = new HashSet<>();
     private final List<AuditEntry> auditTrail = new ArrayList<>();
 
-    public Client(ClientID clientID, Password password) {
-        this.clientID = Validation.value(clientID).notNull().get();
+    public Client(UserName userName, Password password) {
+        this.userName = Validation.value(userName).notNull().get();
         this.password = Validation.value(password).notNull().get();
     }
 
@@ -35,7 +35,7 @@ public class Client {
     }
 
     public boolean acceptCredential(Credential credential) {
-        return credential.acceptCredential(clientID, password);
+        return credential.acceptCredential(userName, password);
     }
 
     private void apply(InterAccountTransferred event) {

@@ -6,8 +6,8 @@ import za.co.no9.app.aggregate.client.ClientService;
 import za.co.no9.app.aggregate.transfer.InterAccountTransferCommand;
 import za.co.no9.app.aggregate.transfer.TransferService;
 import za.co.no9.app.domain.AccountRef;
-import za.co.no9.app.domain.ClientID;
 import za.co.no9.app.domain.Money;
+import za.co.no9.app.domain.UserName;
 import za.co.no9.app.read.AuditEntry;
 import za.co.no9.app.read.Credential;
 import za.co.no9.app.read.ReadService;
@@ -44,7 +44,7 @@ public class API {
         return DI.get(ReadService.class).accountTransactions(accountRef);
     }
 
-    public Either<ReadService.ReadServiceFailure, Stream<AuditEntry>> auditTrail(ClientID clientID) {
-        return DI.get(ReadService.class).auditTrail(clientID);
+    public Either<ReadService.ReadServiceFailure, Stream<AuditEntry>> auditTrail(UserName userName) {
+        return DI.get(ReadService.class).auditTrail(userName);
     }
 }

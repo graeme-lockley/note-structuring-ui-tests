@@ -57,19 +57,19 @@ public class StepDefinitions {
 
     @Given("^a registered client with the user name ([^ ]+) and password (.*)$")
     public void a_registered_client_with_the_user_name_andrew_and_password_password(String username, String password) throws Throwable {
-        final Optional<ClientServiceFailure> failure = DI.get(API.class).addClient(new AddClientCommand(new ClientID(username), new Password(password)));
+        final Optional<ClientServiceFailure> failure = DI.get(API.class).addClient(new AddClientCommand(new UserName(username), new Password(password)));
         assertFalse(failure.isPresent());
     }
 
     @Given("^a registered client with the user name ([^ ]+)$")
     public void a_registered_client_with_the_user_name_andrew(String username) throws Throwable {
-        final Optional<ClientServiceFailure> failure = DI.get(API.class).addClient(new AddClientCommand(new ClientID(username), new Password("password")));
+        final Optional<ClientServiceFailure> failure = DI.get(API.class).addClient(new AddClientCommand(new UserName(username), new Password("password")));
         assertFalse(failure.isPresent());
     }
 
     @When("^I login with the credential (.*)/(.*)")
     public void I_login_with_the_credential_andrew_password(String username, String password) throws Throwable {
-        loginResult = Optional.of(DI.get(API.class).login(Credential.from(new ClientID(username), new Password(password))));
+        loginResult = Optional.of(DI.get(API.class).login(Credential.from(new UserName(username), new Password(password))));
     }
 
     @Then("^the login is successful$")
@@ -87,7 +87,7 @@ public class StepDefinitions {
     @Given("^(.+) has a current account (.+) with opening balance (.+)$")
     public void client_has_a_current_account_with_opening_balance_(String clientID, String accountRef, String openBalance) throws Throwable {
         DI.get(API.class).addAccount(new AddAccountCommand(
-                new ClientID(clientID),
+                new UserName(clientID),
                 new AccountRef(accountRef),
                 Money.from(openBalance),
                 new AccountName("Account Name")));
@@ -96,7 +96,7 @@ public class StepDefinitions {
     @When("^(.+) transfers (.+) from (.+) to ([^ ]+) with description \"(.+)\"$")
     public void andrew_transfers_R_from_to(String clientID, String transferAmount, String sourceAccountRef, String destinationAccountRef, String description) throws Throwable {
         transferResult = DI.get(API.class).interAccountTransfer(new InterAccountTransferCommand(
-                new ClientID(clientID),
+                new UserName(clientID),
                 new AccountRef(sourceAccountRef),
                 new AccountRef(destinationAccountRef),
                 Money.from(transferAmount),
@@ -106,7 +106,7 @@ public class StepDefinitions {
     @When("^(.+) transfers (.+) from (.+) to ([^ ]+)$")
     public void andrew_transfers_R_from_to(String clientID, String transferAmount, String sourceAccountRef, String destinationAccountRef) throws Throwable {
         transferResult = DI.get(API.class).interAccountTransfer(new InterAccountTransferCommand(
-                new ClientID(clientID),
+                new UserName(clientID),
                 new AccountRef(sourceAccountRef),
                 new AccountRef(destinationAccountRef),
                 Money.from(transferAmount),
@@ -150,7 +150,7 @@ public class StepDefinitions {
     @Then("^([^ ]+) has an inter-account transfer audit entry:$")
     public void andrew_has_an_inter_account_transfer_audit_trail_item(String clientID, DataTable dataTable) throws Throwable {
         List<NameValue> items = dataTable.asList(NameValue.class);
-        final Either<ReadServiceFailure, Stream<AuditEntry>> auditTrailEither = DI.get(API.class).auditTrail(new ClientID(clientID));
+        final Either<ReadServiceFailure, Stream<AuditEntry>> auditTrailEither = DI.get(API.class).auditTrail(new UserName(clientID));
         assertTrue(auditTrailEither.toString(), auditTrailEither.isRight());
         assertTrue(auditTrailEither.right().anyMatch(auditEntry -> matchAuditEntry(auditEntry, items)));
     }

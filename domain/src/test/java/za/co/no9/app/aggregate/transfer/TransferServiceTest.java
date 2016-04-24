@@ -15,9 +15,9 @@ import static org.junit.Assert.*;
 import static za.co.no9.app.domain.Currency.ZAR;
 
 public class TransferServiceTest {
-    public static final ClientID VALID_CLIENT = new ClientID("mary-anne");
+    public static final UserName VALID_CLIENT = new UserName("mary-anne");
     public static final Password VALID_CLIENT_PASSWORD = new Password("password");
-    public static final ClientID UNKNOWN_CLIENT = new ClientID("joe-joe");
+    public static final UserName UNKNOWN_CLIENT = new UserName("joe-joe");
 
     public static final AccountRef ACCOUNT_1 = new AccountRef("12345");
     public static final Money ACCOUNT_1_OPENING_BALANCE = new Money(ZAR, 123.45);

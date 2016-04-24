@@ -1,27 +1,27 @@
 package za.co.no9.app.read;
 
-import za.co.no9.app.domain.ClientID;
 import za.co.no9.app.domain.Password;
+import za.co.no9.app.domain.UserName;
 import za.co.no9.app.util.Validation;
 
 public class Credential {
-    private final ClientID clientID;
+    private final UserName userName;
     private final Password password;
 
-    private Credential(ClientID clientID, Password password) {
-        this.clientID = Validation.value(clientID).notNull().get();
+    private Credential(UserName userName, Password password) {
+        this.userName = Validation.value(userName).notNull().get();
         this.password = Validation.value(password).notNull().get();
     }
 
-    public static Credential from(ClientID clientID, Password password) {
-        return new Credential(clientID, password);
+    public static Credential from(UserName userName, Password password) {
+        return new Credential(userName, password);
     }
 
-    public ClientID clientID() {
-        return clientID;
+    public UserName clientID() {
+        return userName;
     }
 
-    public boolean acceptCredential(ClientID clientID, Password password) {
-        return this.clientID.equals(clientID) && this.password.equals(password);
+    public boolean acceptCredential(UserName userName, Password password) {
+        return this.userName.equals(userName) && this.password.equals(password);
     }
 }

@@ -1,23 +1,23 @@
 package za.co.no9.app.aggregate.transfer;
 
-import za.co.no9.app.domain.ClientID;
+import za.co.no9.app.domain.UserName;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 public class Clients {
-    private Map<ClientID, Client> clients = new HashMap<>();
+    private Map<UserName, Client> clients = new HashMap<>();
 
-    public Client get(ClientID clientID) {
-        return find(clientID).get();
+    public Client get(UserName userName) {
+        return find(userName).get();
     }
 
-    public Optional<Client> find(ClientID clientID) {
-        return Optional.ofNullable(clients.get(clientID));
+    public Optional<Client> find(UserName userName) {
+        return Optional.ofNullable(clients.get(userName));
     }
 
-    public void add(ClientID clientID, Client client) {
-        clients.put(clientID, client);
+    public void add(UserName userName, Client client) {
+        clients.put(userName, client);
     }
 }

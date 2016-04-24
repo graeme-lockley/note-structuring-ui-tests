@@ -1,6 +1,6 @@
 package za.co.no9.app.aggregate.client;
 
-import za.co.no9.app.domain.ClientID;
+import za.co.no9.app.domain.UserName;
 import za.co.no9.app.event.AccountAdded;
 import za.co.no9.app.event.ClientAdded;
 import za.co.no9.app.util.DI;
@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ClientService {
-    private Map<ClientID, Client> clients = new HashMap<>();
+    private Map<UserName, Client> clients = new HashMap<>();
 
     public Optional<ClientServiceFailure> addClient(AddClientCommand command) {
-        if (clients.containsKey(command.clientID)) {
+        if (clients.containsKey(command.userName)) {
             return Optional.of(ClientServiceFailure.DUPLICATE_CLIENT_ID);
         }
         DI.get(EventStore.class).publishEvent(command.makeEvent());
@@ -23,7 +23,7 @@ public class ClientService {
     }
 
     public Optional<ClientServiceFailure> addAccount(AddAccountCommand command) {
-        Optional<Client> client = findClient(command.clientID);
+        Optional<Client> client = findClient(command.userName);
         if (client.isPresent()) {
             return client.get().addAccount(command);
         } else {
@@ -31,16 +31,16 @@ public class ClientService {
         }
     }
 
-    private Optional<Client> findClient(ClientID clientID) {
-        return Optional.ofNullable(clients.get(clientID));
+    private Optional<Client> findClient(UserName userName) {
+        return Optional.ofNullable(clients.get(userName));
     }
 
     private void apply(ClientAdded event) {
-        clients.put(event.clientID, new Client());
+        clients.put(event.userName, new Client());
     }
 
     private void apply(AccountAdded event) {
-        DI.get(EventStore.class).processEvent(clients.get(event.clientID), event);
+        DI.get(EventStore.class).processEvent(clients.get(event.userName), event);
     }
 
     public enum ClientServiceFailure {

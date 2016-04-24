@@ -3,8 +3,8 @@ package za.co.no9.app.aggregate.client;
 import org.junit.Before;
 import org.junit.Test;
 import za.co.no9.app.aggregate.client.ClientService.ClientServiceFailure;
-import za.co.no9.app.domain.ClientID;
 import za.co.no9.app.domain.Password;
+import za.co.no9.app.domain.UserName;
 import za.co.no9.app.read.Credential;
 import za.co.no9.app.util.DI;
 import za.co.no9.app.util.EventStore;
@@ -12,7 +12,7 @@ import za.co.no9.app.util.EventStore;
 import static org.junit.Assert.assertEquals;
 
 public class ClientServiceTest {
-    private static final ClientID VALID_CLIENT_NAME = new ClientID("graeme");
+    private static final UserName VALID_CLIENT_NAME = new UserName("graeme");
     private static final Password VALID_CLIENT_PASSWORD = new Password("password");
     private static final Credential VALID_CLIENT_CREDENTIAL = Credential.from(VALID_CLIENT_NAME, VALID_CLIENT_PASSWORD);
 

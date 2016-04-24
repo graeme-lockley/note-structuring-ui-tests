@@ -1,7 +1,7 @@
 package za.co.no9.app.aggregate.transfer;
 
-import za.co.no9.app.domain.ClientID;
 import za.co.no9.app.domain.TransactionRef;
+import za.co.no9.app.domain.UserName;
 import za.co.no9.app.event.AccountAdded;
 import za.co.no9.app.event.ClientAdded;
 import za.co.no9.app.event.InterAccountTransferred;
@@ -20,7 +20,7 @@ public class TransferService {
     public Optional<Set<PaymentServiceFailure>> interAccountTransfer(InterAccountTransferCommand command) {
         final Set<PaymentServiceFailure> failures = new HashSet<>();
 
-        final Optional<Client> client = clients.find(command.clientID);
+        final Optional<Client> client = clients.find(command.userName);
         if (client.isPresent()) {
             final Optional<Account> sourceAccount = client.get().findAccount(command.source);
             final Optional<Account> destinationAccount = client.get().findAccount(command.destination);
@@ -57,15 +57,15 @@ public class TransferService {
     }
 
     private void apply(ClientAdded event) {
-        clients.add(event.clientID, new Client());
+        clients.add(event.userName, new Client());
     }
 
     private void apply(AccountAdded event) {
-        clients.get(event.clientID).addAccount(Account.from(event.reference, event.openingBalance));
+        clients.get(event.userName).addAccount(Account.from(event.reference, event.openingBalance));
     }
 
     private void apply(InterAccountTransferred event) {
-        final Client client = clients.get(event.clientID);
+        final Client client = clients.get(event.userName);
         client.getAccount(event.source).debit(event.amount);
         client.getAccount(event.destination).credit(event.amount);
 
@@ -74,8 +74,8 @@ public class TransferService {
         }
     }
 
-    public Client getClient(ClientID clientID) {
-        return clients.get(clientID);
+    public Client getClient(UserName userName) {
+        return clients.get(userName);
     }
 
     public enum PaymentServiceFailure {

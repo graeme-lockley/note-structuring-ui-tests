@@ -1,8 +1,8 @@
 package za.co.no9.app.read;
 
 import za.co.no9.app.domain.AccountRef;
-import za.co.no9.app.domain.ClientID;
 import za.co.no9.app.domain.Money;
+import za.co.no9.app.domain.UserName;
 import za.co.no9.app.event.AccountAdded;
 import za.co.no9.app.event.ClientAdded;
 import za.co.no9.app.event.InterAccountTransferred;
@@ -27,8 +27,8 @@ public class ReadService {
         return getAccount(accountRef).foldRight(Account::transactions);
     }
 
-    public Either<ReadServiceFailure, Stream<AuditEntry>> auditTrail(ClientID clientID) {
-        return getClient(clientID).foldRight(Client::auditTrail);
+    public Either<ReadServiceFailure, Stream<AuditEntry>> auditTrail(UserName userName) {
+        return getClient(userName).foldRight(Client::auditTrail);
     }
 
     public boolean login(Credential credential) {
@@ -39,21 +39,21 @@ public class ReadService {
         return Either.rightElse(Optional.ofNullable(accounts.get(accountRef)), ReadServiceFailure.UNKNOWN_ACCOUNT_REF);
     }
 
-    private Either<ReadServiceFailure, Client> getClient(ClientID clientID) {
-        return Either.rightElse(Optional.ofNullable(clients.get(clientID)), ReadServiceFailure.UNKNOWN_CLIENT_ID);
+    private Either<ReadServiceFailure, Client> getClient(UserName userName) {
+        return Either.rightElse(Optional.ofNullable(clients.get(userName)), ReadServiceFailure.UNKNOWN_CLIENT_ID);
     }
 
     private void apply(ClientAdded event) {
-        clients.addClient(event.clientID, event.password);
+        clients.addClient(event.userName, event.password);
     }
 
     private void apply(AccountAdded event) {
-        clients.addAccount(event.clientID, event.reference, event.openingBalance);
-        accounts.put(event.reference, clients.get(event.clientID).findAccount(event.reference).get());
+        clients.addAccount(event.userName, event.reference, event.openingBalance);
+        accounts.put(event.reference, clients.get(event.userName).findAccount(event.reference).get());
     }
 
     private void apply(InterAccountTransferred event) {
-        final Client client = clients.get(event.clientID);
+        final Client client = clients.get(event.userName);
         DI.get(EventStore.class).processEvent(client, event);
     }
 

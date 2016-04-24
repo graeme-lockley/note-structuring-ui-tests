@@ -2,10 +2,10 @@ package za.co.no9.app.domain;
 
 import za.co.no9.app.util.Validation;
 
-public class ClientID {
+public class UserName {
     private final String value;
 
-    public ClientID(String value) {
+    public UserName(String value) {
         this.value = Validation.value(value, "value").minimumLength(5).get();
     }
 
@@ -14,9 +14,9 @@ public class ClientID {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ClientID clientID = (ClientID) o;
+        UserName userName = (UserName) o;
 
-        return value.equals(clientID.value);
+        return value.equals(userName.value);
 
     }
 
