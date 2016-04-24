@@ -56,20 +56,20 @@ public class StepDefinitions {
     }
 
     @Given("^a registered client with the user name ([^ ]+) and password (.*)$")
-    public void a_registered_client_with_the_user_name_andrew_and_password_password(String username, String password) throws Throwable {
-        final Optional<ClientServiceFailure> failure = DI.get(API.class).addClient(new AddClientCommand(new UserName(username), new Password(password)));
+    public void a_registered_client_with_the_user_name_andrew_and_password_password(String userName, String password) throws Throwable {
+        final Optional<ClientServiceFailure> failure = DI.get(API.class).addClient(new AddClientCommand(new UserName(userName), new Password(password)));
         assertFalse(failure.isPresent());
     }
 
     @Given("^a registered client with the user name ([^ ]+)$")
-    public void a_registered_client_with_the_user_name_andrew(String username) throws Throwable {
-        final Optional<ClientServiceFailure> failure = DI.get(API.class).addClient(new AddClientCommand(new UserName(username), new Password("password")));
+    public void a_registered_client_with_the_user_name_andrew(String userName) throws Throwable {
+        final Optional<ClientServiceFailure> failure = DI.get(API.class).addClient(new AddClientCommand(new UserName(userName), new Password("password")));
         assertFalse(failure.isPresent());
     }
 
     @When("^I login with the credential (.*)/(.*)")
-    public void I_login_with_the_credential_andrew_password(String username, String password) throws Throwable {
-        loginResult = Optional.of(DI.get(API.class).login(Credential.from(new UserName(username), new Password(password))));
+    public void I_login_with_the_credential_andrew_password(String userName, String password) throws Throwable {
+        loginResult = Optional.of(DI.get(API.class).login(Credential.from(new UserName(userName), new Password(password))));
     }
 
     @Then("^the login is successful$")
