@@ -21,10 +21,8 @@ public class TransferServiceTest {
 
     public static final AccountRef ACCOUNT_1 = new AccountRef("12345");
     public static final Money ACCOUNT_1_OPENING_BALANCE = new Money(ZAR, 123.45);
-    public static final AccountName ACCOUNT_1_NAME = new AccountName("Current Account");
     public static final AccountRef ACCOUNT_2 = new AccountRef("12346");
     public static final Money ACCOUNT_2_OPENING_BALANCE = new Money(ZAR, 12345.67);
-    public static final AccountName ACCOUNT_2_NAME = new AccountName("Cheque Account");
     public static final AccountRef UNKNOWN_ACCOUNT = new AccountRef("12347");
     public static final Money PAYMENT_AMOUNT = new Money(ZAR, 12.00);
     public static final Money ILLEGAL_PAYMENT_AMOUNT = new Money(ZAR, 12345.00);
@@ -42,8 +40,8 @@ public class TransferServiceTest {
         eventStore.registerEventHandler(transferService);
 
         eventStore.publishEvent(new ClientAdded(VALID_CLIENT, VALID_CLIENT_PASSWORD));
-        eventStore.publishEvent(new AccountAdded(VALID_CLIENT, ACCOUNT_1, ACCOUNT_1_OPENING_BALANCE, ACCOUNT_1_NAME));
-        eventStore.publishEvent(new AccountAdded(VALID_CLIENT, ACCOUNT_2, ACCOUNT_2_OPENING_BALANCE, ACCOUNT_2_NAME));
+        eventStore.publishEvent(new AccountAdded(VALID_CLIENT, ACCOUNT_1, ACCOUNT_1_OPENING_BALANCE));
+        eventStore.publishEvent(new AccountAdded(VALID_CLIENT, ACCOUNT_2, ACCOUNT_2_OPENING_BALANCE));
     }
 
     @Test

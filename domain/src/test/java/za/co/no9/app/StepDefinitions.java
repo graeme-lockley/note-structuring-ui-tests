@@ -89,8 +89,8 @@ public class StepDefinitions {
         DI.get(API.class).addAccount(new AddAccountCommand(
                 new UserName(clientID),
                 new AccountRef(accountRef),
-                Money.from(openBalance),
-                new AccountName("Account Name")));
+                Money.from(openBalance)
+        ));
     }
 
     @When("^(.+) transfers (.+) from (.+) to ([^ ]+) with description \"(.+)\"$")
