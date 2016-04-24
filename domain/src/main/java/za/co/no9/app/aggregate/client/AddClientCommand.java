@@ -5,15 +5,15 @@ import za.co.no9.app.domain.UserName;
 import za.co.no9.app.event.ClientAdded;
 
 public class AddClientCommand {
-    public final UserName userName;
-    public final Password password;
+    final UserName userName;
+    private final Password password;
 
     public AddClientCommand(UserName userName, Password password) {
         this.userName = userName;
         this.password = password;
     }
 
-    public ClientAdded makeEvent() {
+    ClientAdded makeEvent() {
         return new ClientAdded(userName, password);
     }
 }

@@ -88,7 +88,7 @@ public class StepDefinitions {
     public void client_has_a_current_account_with_opening_balance_(String clientID, String accountRef, String openBalance) throws Throwable {
         DI.get(API.class).addAccount(new AddAccountCommand(
                 new UserName(clientID),
-                new AccountRef(accountRef),
+                new AccountNumber(accountRef),
                 Money.from(openBalance)
         ));
     }
@@ -97,8 +97,8 @@ public class StepDefinitions {
     public void andrew_transfers_R_from_to(String clientID, String transferAmount, String sourceAccountRef, String destinationAccountRef, String description) throws Throwable {
         transferResult = DI.get(API.class).interAccountTransfer(new InterAccountTransferCommand(
                 new UserName(clientID),
-                new AccountRef(sourceAccountRef),
-                new AccountRef(destinationAccountRef),
+                new AccountNumber(sourceAccountRef),
+                new AccountNumber(destinationAccountRef),
                 Money.from(transferAmount),
                 new TransactionDescription(description)));
     }
@@ -107,8 +107,8 @@ public class StepDefinitions {
     public void andrew_transfers_R_from_to(String clientID, String transferAmount, String sourceAccountRef, String destinationAccountRef) throws Throwable {
         transferResult = DI.get(API.class).interAccountTransfer(new InterAccountTransferCommand(
                 new UserName(clientID),
-                new AccountRef(sourceAccountRef),
-                new AccountRef(destinationAccountRef),
+                new AccountNumber(sourceAccountRef),
+                new AccountNumber(destinationAccountRef),
                 Money.from(transferAmount),
                 new TransactionDescription("Default")));
     }
@@ -120,7 +120,7 @@ public class StepDefinitions {
 
     @Then("^the account (\\d+) has a balance of (.+)$")
     public void the_account_has_a_balance_of_R_(String accountRef, String accountBalance) throws Throwable {
-        final Either<ReadServiceFailure, Money> accountBalanceEither = DI.get(API.class).accountBalance(new AccountRef(accountRef));
+        final Either<ReadServiceFailure, Money> accountBalanceEither = DI.get(API.class).accountBalance(new AccountNumber(accountRef));
         assertTrue(accountBalanceEither.toString(), accountBalanceEither.isRight());
         assertEquals(Money.from(accountBalance), accountBalanceEither.right());
     }
@@ -133,16 +133,16 @@ public class StepDefinitions {
 
     @Then("^the account ([^ ]+) has a debit transaction of ([^ ]+) with description \"([^\"]*)\"$")
     public void the_account_has_a_debit_transaction_of_R_with_reference(String accountRef, String amount, String description) throws Throwable {
-        assertTransaction(new AccountRef(accountRef), true, Money.from(amount), new TransactionDescription(description));
+        assertTransaction(new AccountNumber(accountRef), true, Money.from(amount), new TransactionDescription(description));
     }
 
     @Then("^the account ([^ ]+) has a credit transaction of ([^ ]+) with description \"([^\"]*)\"$")
     public void the_account_has_a_credit_transaction_of_R_with_reference(String accountRef, String amount, String description) throws Throwable {
-        assertTransaction(new AccountRef(accountRef), false, Money.from(amount), new TransactionDescription(description));
+        assertTransaction(new AccountNumber(accountRef), false, Money.from(amount), new TransactionDescription(description));
     }
 
-    private void assertTransaction(AccountRef accountRef, boolean isDebit, Money amount, TransactionDescription description) throws Throwable {
-        final Either<ReadServiceFailure, Stream<Transaction>> accountTransactionsEither = DI.get(API.class).accountTransactions(accountRef);
+    private void assertTransaction(AccountNumber accountNumber, boolean isDebit, Money amount, TransactionDescription description) throws Throwable {
+        final Either<ReadServiceFailure, Stream<Transaction>> accountTransactionsEither = DI.get(API.class).accountTransactions(accountNumber);
         assertTrue(accountTransactionsEither.toString(), accountTransactionsEither.isRight());
         assertTrue(accountTransactionsEither.right().anyMatch(t -> t.isDebit == isDebit && t.amount.equals(amount) && t.description.equals(description)));
     }

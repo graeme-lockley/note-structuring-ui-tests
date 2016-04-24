@@ -43,7 +43,7 @@ public abstract class Either<T, U> {
     private static class EitherLeft<L, R> extends Either<L, R> {
         private final L l;
 
-        public EitherLeft(L l) {
+        EitherLeft(L l) {
             this.l = Validation.value(l).notNull().get();
         }
 
@@ -83,7 +83,7 @@ public abstract class Either<T, U> {
     private static class EitherRight<L, R> extends Either<L, R> {
         private final R r;
 
-        public EitherRight(R r) {
+        EitherRight(R r) {
             this.r = Validation.value(r).notNull().get();
         }
 

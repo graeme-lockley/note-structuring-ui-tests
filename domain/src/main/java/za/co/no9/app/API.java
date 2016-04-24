@@ -5,7 +5,7 @@ import za.co.no9.app.aggregate.client.AddClientCommand;
 import za.co.no9.app.aggregate.client.ClientService;
 import za.co.no9.app.aggregate.transfer.InterAccountTransferCommand;
 import za.co.no9.app.aggregate.transfer.TransferService;
-import za.co.no9.app.domain.AccountRef;
+import za.co.no9.app.domain.AccountNumber;
 import za.co.no9.app.domain.Money;
 import za.co.no9.app.domain.UserName;
 import za.co.no9.app.read.AuditEntry;
@@ -36,12 +36,12 @@ public class API {
         return DI.get(ClientService.class).addAccount(command);
     }
 
-    public Either<ReadService.ReadServiceFailure, Money> accountBalance(AccountRef accountRef) {
-        return DI.get(ReadService.class).accountBalance(accountRef);
+    public Either<ReadService.ReadServiceFailure, Money> accountBalance(AccountNumber accountNumber) {
+        return DI.get(ReadService.class).accountBalance(accountNumber);
     }
 
-    public Either<ReadService.ReadServiceFailure, Stream<Transaction>> accountTransactions(AccountRef accountRef) {
-        return DI.get(ReadService.class).accountTransactions(accountRef);
+    public Either<ReadService.ReadServiceFailure, Stream<Transaction>> accountTransactions(AccountNumber accountNumber) {
+        return DI.get(ReadService.class).accountTransactions(accountNumber);
     }
 
     public Either<ReadService.ReadServiceFailure, Stream<AuditEntry>> auditTrail(UserName userName) {

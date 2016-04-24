@@ -1,23 +1,23 @@
 package za.co.no9.app.aggregate.transfer;
 
-import za.co.no9.app.domain.AccountRef;
+import za.co.no9.app.domain.AccountNumber;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public class Client {
+class Client {
     private Set<Account> accounts = new HashSet<>();
 
-    public Account getAccount(AccountRef accountRef) {
-        return findAccount(accountRef).get();
+    Account getAccount(AccountNumber accountNumber) {
+        return findAccount(accountNumber).get();
     }
 
-    public Optional<Account> findAccount(AccountRef accountRef) {
-        return accounts.stream().filter(a -> a.reference().equals(accountRef)).findFirst();
+    Optional<Account> findAccount(AccountNumber accountNumber) {
+        return accounts.stream().filter(a -> a.reference().equals(accountNumber)).findFirst();
     }
 
-    public void addAccount(Account account) {
+    void addAccount(Account account) {
         accounts.add(account);
     }
 }

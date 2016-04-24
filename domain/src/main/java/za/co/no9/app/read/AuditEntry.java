@@ -1,6 +1,6 @@
 package za.co.no9.app.read;
 
-import za.co.no9.app.domain.AccountRef;
+import za.co.no9.app.domain.AccountNumber;
 import za.co.no9.app.domain.Money;
 import za.co.no9.app.domain.TransactionDescription;
 import za.co.no9.app.domain.TransactionRef;
@@ -10,16 +10,16 @@ import java.util.Date;
 
 public class AuditEntry {
     public final Date when;
-    public final AccountRef sourceAccount;
-    public final AccountRef destinationAccount;
+    public final AccountNumber sourceAccount;
+    public final AccountNumber destinationAccount;
     public final Money amount;
     public final TransactionRef reference;
     public final TransactionDescription description;
 
-    public AuditEntry(
+    AuditEntry(
             Date when,
-            AccountRef sourceAccount,
-            AccountRef destinationAccount,
+            AccountNumber sourceAccount,
+            AccountNumber destinationAccount,
             Money amount,
             TransactionRef reference,
             TransactionDescription description) {

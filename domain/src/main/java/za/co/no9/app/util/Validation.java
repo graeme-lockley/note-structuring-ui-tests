@@ -21,20 +21,13 @@ public class Validation {
         private final String value;
         private final Optional<String> name;
 
-        public StringValidation(String value, Optional<String> name) {
+        StringValidation(String value, Optional<String> name) {
             this.value = value;
             this.name = name;
         }
 
         public String get() {
             return value;
-        }
-
-        public StringValidation notNull() {
-            if (value == null) {
-                throw new NullPointerException(name.orElse("field") + " may not be null.");
-            }
-            return this;
         }
 
         public StringValidation notEmpty() {
@@ -52,7 +45,7 @@ public class Validation {
     public static class ObjectValidation<T> extends Validation {
         private final T value;
 
-        public ObjectValidation(T value) {
+        ObjectValidation(T value) {
             this.value = value;
         }
 

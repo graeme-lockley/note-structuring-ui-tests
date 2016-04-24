@@ -19,11 +19,11 @@ public class TransferServiceTest {
     public static final Password VALID_CLIENT_PASSWORD = new Password("password");
     public static final UserName UNKNOWN_CLIENT = new UserName("joe-joe");
 
-    public static final AccountRef ACCOUNT_1 = new AccountRef("12345");
+    public static final AccountNumber ACCOUNT_1 = new AccountNumber("12345");
     public static final Money ACCOUNT_1_OPENING_BALANCE = new Money(ZAR, 123.45);
-    public static final AccountRef ACCOUNT_2 = new AccountRef("12346");
+    public static final AccountNumber ACCOUNT_2 = new AccountNumber("12346");
     public static final Money ACCOUNT_2_OPENING_BALANCE = new Money(ZAR, 12345.67);
-    public static final AccountRef UNKNOWN_ACCOUNT = new AccountRef("12347");
+    public static final AccountNumber UNKNOWN_ACCOUNT = new AccountNumber("12347");
     public static final Money PAYMENT_AMOUNT = new Money(ZAR, 12.00);
     public static final Money ILLEGAL_PAYMENT_AMOUNT = new Money(ZAR, 12345.00);
     public static final TransactionDescription PAYMENT_DESCRIPTION = new TransactionDescription("Test Payment");

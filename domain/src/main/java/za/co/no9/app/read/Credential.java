@@ -17,11 +17,11 @@ public class Credential {
         return new Credential(userName, password);
     }
 
-    public UserName clientID() {
+    UserName clientID() {
         return userName;
     }
 
-    public boolean acceptCredential(UserName userName, Password password) {
+    boolean acceptCredential(UserName userName, Password password) {
         return this.userName.equals(userName) && this.password.equals(password);
     }
 }

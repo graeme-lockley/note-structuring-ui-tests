@@ -52,7 +52,7 @@ public class TransferService {
         }
     }
 
-    protected Date getTransactionDate() {
+    private Date getTransactionDate() {
         return new Date();
     }
 
@@ -74,7 +74,7 @@ public class TransferService {
         }
     }
 
-    public Client getClient(UserName userName) {
+    Client getClient(UserName userName) {
         return clients.get(userName);
     }
 

@@ -6,18 +6,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class Clients {
+class Clients {
     private Map<UserName, Client> clients = new HashMap<>();
 
-    public Client get(UserName userName) {
+    Client get(UserName userName) {
         return find(userName).get();
     }
 
-    public Optional<Client> find(UserName userName) {
+    Optional<Client> find(UserName userName) {
         return Optional.ofNullable(clients.get(userName));
     }
 
-    public void add(UserName userName, Client client) {
+    void add(UserName userName, Client client) {
         clients.put(userName, client);
     }
 }

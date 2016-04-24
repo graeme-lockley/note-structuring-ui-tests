@@ -1,44 +1,44 @@
 package za.co.no9.app.aggregate.transfer;
 
-import za.co.no9.app.domain.AccountRef;
+import za.co.no9.app.domain.AccountNumber;
 import za.co.no9.app.domain.Currency;
 import za.co.no9.app.domain.Money;
 import za.co.no9.app.util.Validation;
 
-public class Account {
-    private final AccountRef reference;
+class Account {
+    private final AccountNumber accountNumber;
     private Money balance;
 
-    private Account(AccountRef reference, Money balance) {
-        this.reference = Validation.value(reference).notNull().get();
+    private Account(AccountNumber accountNumber, Money balance) {
+        this.accountNumber = Validation.value(accountNumber).notNull().get();
         this.balance = Validation.value(balance).notNull().get();
     }
 
-    public static Account from(AccountRef reference, Money balance) {
+    static Account from(AccountNumber reference, Money balance) {
         return new Account(reference, balance);
     }
 
-    public AccountRef reference() {
-        return reference;
+    AccountNumber reference() {
+        return accountNumber;
     }
 
-    public boolean hasSufficientFundsToDebit(Money amount) {
+    boolean hasSufficientFundsToDebit(Money amount) {
         return balance.greaterThan(amount);
     }
 
-    public void debit(Money amount) {
+    void debit(Money amount) {
         balance = balance.subtract(amount);
     }
 
-    public void credit(Money amount) {
+    void credit(Money amount) {
         balance = balance.add(amount);
     }
 
-    public Money balance() {
+    Money balance() {
         return balance;
     }
 
-    public Currency currency() {
+    Currency currency() {
         return balance.currency();
     }
 }

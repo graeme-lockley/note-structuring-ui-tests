@@ -8,13 +8,13 @@ import java.util.Date;
 public class InterAccountTransferred implements Event {
     public final UserName userName;
     public final Date when;
-    public final AccountRef source;
-    public final AccountRef destination;
+    public final AccountNumber source;
+    public final AccountNumber destination;
     public final Money amount;
     public final TransactionRef reference;
     public final TransactionDescription description;
 
-    public InterAccountTransferred(UserName userName, Date when, AccountRef source, AccountRef destination, Money amount, TransactionRef reference, TransactionDescription description) {
+    public InterAccountTransferred(UserName userName, Date when, AccountNumber source, AccountNumber destination, Money amount, TransactionRef reference, TransactionDescription description) {
         this.userName = userName;
         this.when = when;
         this.source = source;

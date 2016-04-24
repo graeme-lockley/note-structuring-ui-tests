@@ -1,6 +1,6 @@
 package za.co.no9.app.read;
 
-import za.co.no9.app.domain.AccountRef;
+import za.co.no9.app.domain.AccountNumber;
 import za.co.no9.app.domain.Money;
 import za.co.no9.app.domain.UserName;
 import za.co.no9.app.event.AccountAdded;
@@ -17,14 +17,14 @@ import java.util.stream.Stream;
 
 public class ReadService {
     private final Clients clients = new Clients();
-    private final Map<AccountRef, Account> accounts = new HashMap<>();
+    private final Map<AccountNumber, Account> accounts = new HashMap<>();
 
-    public Either<ReadServiceFailure, Money> accountBalance(AccountRef accountRef) {
-        return getAccount(accountRef).foldRight(Account::balance);
+    public Either<ReadServiceFailure, Money> accountBalance(AccountNumber accountNumber) {
+        return getAccount(accountNumber).foldRight(Account::balance);
     }
 
-    public Either<ReadServiceFailure, Stream<Transaction>> accountTransactions(AccountRef accountRef) {
-        return getAccount(accountRef).foldRight(Account::transactions);
+    public Either<ReadServiceFailure, Stream<Transaction>> accountTransactions(AccountNumber accountNumber) {
+        return getAccount(accountNumber).foldRight(Account::transactions);
     }
 
     public Either<ReadServiceFailure, Stream<AuditEntry>> auditTrail(UserName userName) {
@@ -35,8 +35,8 @@ public class ReadService {
         return getClient(credential.clientID()).fold(l -> false, c -> c.acceptCredential(credential));
     }
 
-    private Either<ReadServiceFailure, Account> getAccount(AccountRef accountRef) {
-        return Either.rightElse(Optional.ofNullable(accounts.get(accountRef)), ReadServiceFailure.UNKNOWN_ACCOUNT_REF);
+    private Either<ReadServiceFailure, Account> getAccount(AccountNumber accountNumber) {
+        return Either.rightElse(Optional.ofNullable(accounts.get(accountNumber)), ReadServiceFailure.UNKNOWN_ACCOUNT_REF);
     }
 
     private Either<ReadServiceFailure, Client> getClient(UserName userName) {
