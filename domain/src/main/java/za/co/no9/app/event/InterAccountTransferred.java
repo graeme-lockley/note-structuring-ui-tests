@@ -1,5 +1,6 @@
 package za.co.no9.app.event;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import za.co.no9.app.domain.*;
 import za.co.no9.app.util.Event;
 
@@ -22,5 +23,19 @@ public class InterAccountTransferred implements Event {
         this.amount = amount;
         this.reference = reference;
         this.description = description;
+    }
+
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("userName", userName)
+                .append("date", when)
+                .append("source", source)
+                .append("destination", destination)
+                .append("amount", amount)
+                .append("reference", reference)
+                .append("description", description)
+                .build();
     }
 }
